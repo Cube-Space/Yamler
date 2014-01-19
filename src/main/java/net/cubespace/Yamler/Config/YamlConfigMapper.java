@@ -61,7 +61,7 @@ public class YamlConfigMapper {
         try(FileWriter fileWriter = new FileWriter(CONFIG_FILE)) {
             if(CONFIG_HEADER != null) {
                 for(String line : CONFIG_HEADER) {
-                    fileWriter.write(line + "\n");
+                    fileWriter.write("# " + line + "\n");
                 }
 
                 fileWriter.write("\n");
