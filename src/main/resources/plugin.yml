@@ -1,4 +1,4 @@
-name: CloudChat
+name: Yamler
 main : net.cubespace.Yamler.YamlerPlugin
-version: 1.0.2
+version: 1.0.4
 author: geNAZt

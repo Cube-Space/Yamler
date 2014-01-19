@@ -1,5 +1,7 @@
 package net.cubespace.Yamler.Config;
 
+import net.md_5.bungee.api.plugin.Plugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;

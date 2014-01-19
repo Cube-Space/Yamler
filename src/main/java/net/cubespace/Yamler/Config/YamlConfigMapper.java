@@ -2,7 +2,7 @@ package net.cubespace.Yamler.Config;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
 
@@ -19,15 +19,18 @@ public class YamlConfigMapper {
     protected transient File CONFIG_FILE = null;
     protected transient String[] CONFIG_HEADER = null;
 
-    private final DumperOptions yamlOptions = new DumperOptions();
-    private final Representer yamlRepresenter = new Representer();
-    private final Yaml yaml = new Yaml(new Constructor(), yamlRepresenter, yamlOptions);
+    private Yaml yaml;
     protected ConfigSection root = new ConfigSection();
 
     protected YamlConfigMapper() {
+        DumperOptions yamlOptions = new DumperOptions();
         yamlOptions.setIndent(2);
         yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        Representer yamlRepresenter = new Representer();
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        yaml = new Yaml(new CustomClassLoaderConstructor(YamlConfigMapper.class.getClassLoader()), yamlRepresenter, yamlOptions);
     }
 
     protected void loadFromYaml() throws InvalidConfigurationException {

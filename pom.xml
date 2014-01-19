@@ -6,7 +6,7 @@
 
     <groupId>net.cubespace</groupId>
     <artifactId>Yamler</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
 
     <distributionManagement>
         <snapshotRepository>
