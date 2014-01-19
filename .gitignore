@@ -1,0 +1,16 @@
+### IntelliJ ###
+*.iml
+*.ipr
+*.iws
+.idea/
+
+### Package Files ###
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+
+### Custom ###
+server/*
