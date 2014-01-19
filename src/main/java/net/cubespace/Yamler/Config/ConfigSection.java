@@ -117,6 +117,10 @@ public class ConfigSection {
         }
     }
 
+    public Map getMap(String path) {
+        return ((ConfigSection) configFastLookupCache.get(path)).getRawMap();
+    }
+
     public Map<String, Object> getValues(boolean deep) {
         Map<String, Object> result = new LinkedHashMap<>();
         mapChildrenValues(result, this, deep);
@@ -133,5 +137,9 @@ public class ConfigSection {
 
     public <T> T get(String path) {
         return configFastLookupCache.get(path);
+    }
+
+    public Map getRawMap() {
+        return map;
     }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -86,7 +87,11 @@ public class Config extends YamlConfigMapper implements IConfig {
 
             if(root.has(path)) {
                 try {
-                    field.set(this, root.get(path));
+                    if(HashMap.class.isAssignableFrom(field.getType())) {
+                        field.set(this, root.getMap(path));
+                    } else {
+                        field.set(this, root.get(path));
+                    }
                 } catch (IllegalAccessException e) {
                     throw new InvalidConfigurationException("Could not set field", e);
                 }
