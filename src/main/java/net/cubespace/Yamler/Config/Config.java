@@ -140,6 +140,6 @@ public class Config extends YamlConfigMapper implements IConfig {
 
     protected boolean doSkip(Field field) {
         return Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers())
-                || Modifier.isFinal(field.getModifiers()) || !Modifier.isPublic(field.getModifiers());
+                || Modifier.isFinal(field.getModifiers());
     }
 }

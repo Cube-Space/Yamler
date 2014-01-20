@@ -7,7 +7,7 @@ import java.util.Map;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class ConfigFastLookupCache {
-   private HashMap<String, Object> lookupTable = new HashMap<>();
+    private HashMap<String, Object> lookupTable = new HashMap<>();
 
     public void set(String fullPath, Object section) {
         lookupTable.put(fullPath, section);

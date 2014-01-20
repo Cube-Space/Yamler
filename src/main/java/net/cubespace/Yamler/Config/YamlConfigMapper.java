@@ -22,9 +22,9 @@ public class YamlConfigMapper {
     protected transient File CONFIG_FILE = null;
     protected transient String[] CONFIG_HEADER = null;
 
-    private Yaml yaml;
-    protected ConfigSection root = new ConfigSection();
-    private HashMap<String, ArrayList<String>> comments = new HashMap<>();
+    private transient Yaml yaml;
+    protected transient ConfigSection root = new ConfigSection();
+    private transient HashMap<String, ArrayList<String>> comments = new HashMap<>();
 
     protected YamlConfigMapper() {
         DumperOptions yamlOptions = new DumperOptions();
@@ -118,7 +118,7 @@ public class YamlConfigMapper {
         }
     }
 
-    static private String join(List<String> list, String conjunction) {
+    private static String join(List<String> list, String conjunction) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String item : list) {
