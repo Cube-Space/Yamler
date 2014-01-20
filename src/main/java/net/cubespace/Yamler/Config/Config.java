@@ -1,9 +1,8 @@
 package net.cubespace.Yamler.Config;
 
-import net.md_5.bungee.api.plugin.Plugin;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 public class Config extends YamlConfigMapper implements IConfig {
     @Override
     public void save() throws InvalidConfigurationException {
-        if(CONFIG_FILE == null) {
+        if (CONFIG_FILE == null) {
             throw new IllegalArgumentException("Saving a config without given File");
         }
 
@@ -22,6 +21,21 @@ public class Config extends YamlConfigMapper implements IConfig {
             String path = field.getName().replaceAll("_", ".");
 
             if (doSkip(field)) continue;
+
+            for (Annotation annotation : field.getAnnotations()) {
+                if (annotation instanceof Comment) {
+                    Comment comment = (Comment) annotation;
+                    addComment(path, comment.value());
+                }
+
+                if (annotation instanceof Comments) {
+                    Comments comment = (Comments) annotation;
+
+                    for (String comment1 : comment.value()) {
+                        addComment(path, comment1);
+                    }
+                }
+            }
 
             try {
                 root.set(path, field.get(this));
@@ -35,7 +49,7 @@ public class Config extends YamlConfigMapper implements IConfig {
 
     @Override
     public void save(File file) throws InvalidConfigurationException {
-        if(file == null) {
+        if (file == null) {
             throw new IllegalArgumentException("File argument can not be null");
         }
 
@@ -45,8 +59,10 @@ public class Config extends YamlConfigMapper implements IConfig {
 
     @Override
     public void init() throws InvalidConfigurationException {
-        if(!CONFIG_FILE.exists()) {
-            CONFIG_FILE.getParentFile().mkdirs();
+        if (!CONFIG_FILE.exists()) {
+            if (CONFIG_FILE.getParentFile() != null)
+                CONFIG_FILE.getParentFile().mkdirs();
+
             try {
                 CONFIG_FILE.createNewFile();
                 save();
@@ -60,7 +76,7 @@ public class Config extends YamlConfigMapper implements IConfig {
 
     @Override
     public void init(File file) throws InvalidConfigurationException {
-        if(file == null) {
+        if (file == null) {
             throw new IllegalArgumentException("File argument can not be null");
         }
 
@@ -75,8 +91,8 @@ public class Config extends YamlConfigMapper implements IConfig {
 
     @Override
     public void load() throws InvalidConfigurationException {
-        if(CONFIG_FILE == null) {
-            throw  new IllegalArgumentException("Loading a config without given File");
+        if (CONFIG_FILE == null) {
+            throw new IllegalArgumentException("Loading a config without given File");
         }
 
         loadFromYaml();
@@ -87,9 +103,9 @@ public class Config extends YamlConfigMapper implements IConfig {
 
             if (doSkip(field)) continue;
 
-            if(root.has(path)) {
+            if (root.has(path)) {
                 try {
-                    if(HashMap.class.isAssignableFrom(field.getType())) {
+                    if (HashMap.class.isAssignableFrom(field.getType())) {
                         field.set(this, root.getMap(path));
                     } else {
                         field.set(this, root.get(path));
@@ -107,14 +123,14 @@ public class Config extends YamlConfigMapper implements IConfig {
             }
         }
 
-        if(save) {
+        if (save) {
             save();
         }
     }
 
     @Override
     public void load(File file) throws InvalidConfigurationException {
-        if(file == null) {
+        if (file == null) {
             throw new IllegalArgumentException("File argument can not be null");
         }
 
