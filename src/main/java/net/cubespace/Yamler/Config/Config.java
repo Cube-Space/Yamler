@@ -37,6 +37,9 @@ public class Config extends YamlConfigMapper implements IConfig {
                 }
             }
 
+            if(Modifier.isPrivate(field.getModifiers()))
+                field.setAccessible(true);
+
             try {
                 root.set(path, field.get(this));
             } catch (IllegalAccessException e) {
