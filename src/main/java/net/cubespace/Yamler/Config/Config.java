@@ -106,6 +106,9 @@ public class Config extends YamlConfigMapper implements IConfig {
 
             if (doSkip(field)) continue;
 
+            if(Modifier.isPrivate(field.getModifiers()))
+                field.setAccessible(true);
+
             if (root.has(path)) {
                 try {
                     if (HashMap.class.isAssignableFrom(field.getType())) {
