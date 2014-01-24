@@ -3,9 +3,12 @@ package net.cubespace.Yamler.Config;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -41,7 +44,13 @@ public class Config extends YamlConfigMapper implements IConfig {
                 field.setAccessible(true);
 
             try {
-                root.set(path, field.get(this));
+                Object obj = field.get(this);
+
+                if(obj instanceof Config) {
+                    root.set(path, ((Config) obj).getAsMap());
+                } else {
+                    root.set(path, field.get(this));
+                }
             } catch (IllegalAccessException e) {
                 throw new InvalidConfigurationException("Could not save the Field", e);
             }
@@ -111,12 +120,18 @@ public class Config extends YamlConfigMapper implements IConfig {
 
             if (root.has(path)) {
                 try {
-                    if (HashMap.class.isAssignableFrom(field.getType())) {
+                    if (Map.class.isAssignableFrom(field.getType())) {
                         field.set(this, root.getMap(path));
+                    } else if (field.getType().isArray()) {
+                        setList(field, field.getType().getComponentType(), (List) root.get(path));
+                    } else if (Config.class.isAssignableFrom(field.getType())) {
+                        Map section = root.getMap(path);
+                        Config obj = (Config) field.getType().cast(field.getType().newInstance());
+                        obj.loadFromMap(section);
                     } else {
                         field.set(this, root.get(path));
                     }
-                } catch (IllegalAccessException e) {
+                } catch (Exception e) {
                     throw new InvalidConfigurationException("Could not set field", e);
                 }
             } else {
@@ -134,6 +149,29 @@ public class Config extends YamlConfigMapper implements IConfig {
         }
     }
 
+    private void loadFromMap(Map section) throws NoSuchFieldException, IllegalAccessException {
+        for(Map.Entry<String, Object> entry : ((Map<String, Object>) section).entrySet()) {
+            String path = entry.getKey().replace(".", "_");
+
+            Field field = this.getClass().getDeclaredField(path);
+
+            if(Modifier.isPrivate(field.getModifiers()))
+                field.setAccessible(true);
+
+            field.set(this, entry.getValue());
+        }
+    }
+
+    private <T> void setList(Field field, Class<T> type, List list) {
+        T[] array;
+        try {
+            array = (T[]) Array.newInstance(type, list.size());
+            field.set(this, list.toArray(array));
+        } catch (IllegalAccessException e) {
+
+        }
+    }
+
     @Override
     public void load(File file) throws InvalidConfigurationException {
         if (file == null) {
@@ -147,5 +185,26 @@ public class Config extends YamlConfigMapper implements IConfig {
     protected boolean doSkip(Field field) {
         return Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers())
                 || Modifier.isFinal(field.getModifiers());
+    }
+
+    public Map getAsMap() {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        for (Field field : getClass().getDeclaredFields()) {
+            String path = field.getName().replaceAll("_", ".");
+
+            if (doSkip(field)) continue;
+
+            if(Modifier.isPrivate(field.getModifiers()))
+                field.setAccessible(true);
+
+            try {
+                returnMap.put(path, field.get(this));
+            } catch (IllegalAccessException e) {
+
+            }
+        }
+
+        return returnMap;
     }
 }

@@ -9,13 +9,11 @@ import java.util.Map;
 public class ConfigSection {
     private String key;
     private String fullPath;
-    private ConfigSection root;
     private ConfigFastLookupCache configFastLookupCache;
     protected final Map<String, Object> map = new LinkedHashMap<>();
 
     public ConfigSection() {
         this.key = "";
-        this.root = this;
         this.fullPath = "";
 
         configFastLookupCache = new ConfigFastLookupCache();
@@ -24,7 +22,6 @@ public class ConfigSection {
     public ConfigSection(ConfigSection root, String key) {
         this.key = key;
         this.fullPath = (!root.key.equals("")) ? root.key + "." + key : key;
-        this.root = root;
         this.configFastLookupCache = root.configFastLookupCache;
         configFastLookupCache.set(fullPath, this);
     }

@@ -25,13 +25,13 @@ public class YamlConfigMapper {
     private transient Yaml yaml;
     protected transient ConfigSection root = new ConfigSection();
     private transient HashMap<String, ArrayList<String>> comments = new HashMap<>();
+    private transient Representer yamlRepresenter = new Representer();
 
     protected YamlConfigMapper() {
         DumperOptions yamlOptions = new DumperOptions();
         yamlOptions.setIndent(2);
         yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        Representer yamlRepresenter = new Representer();
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         yaml = new Yaml(new CustomClassLoaderConstructor(YamlConfigMapper.class.getClassLoader()), yamlRepresenter, yamlOptions);
@@ -39,7 +39,10 @@ public class YamlConfigMapper {
 
     protected void loadFromYaml() throws InvalidConfigurationException {
         try {
-            convertMapsToSections((Map<?, ?>) yaml.load(new FileReader(CONFIG_FILE)), root);
+            Object object = yaml.load(new FileReader(CONFIG_FILE));
+
+            if(object != null)
+                convertMapsToSections((Map<?, ?>) yaml.load(new FileReader(CONFIG_FILE)), root);
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
@@ -85,11 +88,12 @@ public class YamlConfigMapper {
                 } else {
                     if (line.startsWith(new String(new char[depth - 2]).replace("\0", " "))) {
                         keyChain.remove(keyChain.size()-1);
-                        keyChain.add(line.split(":")[0].trim());
                     } else {
-                        depth = 0;
+                        depth = 2;
                         keyChain = new ArrayList<>();
                     }
+
+                    keyChain.add(line.split(":")[0].trim());
                 }
 
                 String search;
@@ -138,5 +142,9 @@ public class YamlConfigMapper {
         }
 
         comments.get(key).add(value);
+    }
+
+    public Map getInnerMap(String path) {
+        return root.getMap(path);
     }
 }
