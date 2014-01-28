@@ -13,6 +13,7 @@ public class YamlerPlugin extends Plugin {
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
+            e.printStackTrace();
             getLogger().info("Could not start metrics");
         }
     }

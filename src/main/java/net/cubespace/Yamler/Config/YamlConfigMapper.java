@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class YamlConfigMapper {
+public class YamlConfigMapper extends ConfigBasic {
     protected transient File CONFIG_FILE = null;
     protected transient String[] CONFIG_HEADER = null;
 
@@ -38,8 +38,8 @@ public class YamlConfigMapper {
     }
 
     protected void loadFromYaml() throws InvalidConfigurationException {
-        try {
-            Object object = yaml.load(new FileReader(CONFIG_FILE));
+        try (FileReader fileReader = new FileReader(CONFIG_FILE)) {
+            Object object = yaml.load(fileReader);
 
             if(object != null)
                 convertMapsToSections((Map<?, ?>) yaml.load(new FileReader(CONFIG_FILE)), root);
