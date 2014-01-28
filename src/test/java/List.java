@@ -1,10 +1,13 @@
 import Config.ListConfig;
+import Config.ListSubConfig;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -33,15 +36,27 @@ public class List {
 
         String fileContents = Util.readFile(file);
 
-        System.out.println(fileContents);
+        assertEquals(fileContents.replace("\r", ""), "TestList:\n" +
+                "- Test: Test\n");
+    }
 
-        /*assertEquals(fileContents.replace("\r", ""), "TestBoolean: false\n" +
-                "TestInt: 0\n" +
-                "TestShort: 0\n" +
-                "TestByte: 0\n" +
-                "TestDouble: 1.0E-7\n" +
-                "TestFloat: 1.0E-4\n" +
-                "TestLong: 1684654679684\n" +
-                "TestChar: c\n"); */
+    @org.testng.annotations.Test(priority = 2)
+    public void changeBoolean() throws InvalidConfigurationException, IOException {
+        listConfig.TestList.add(new ListSubConfig());
+        listConfig.save();
+
+        String fileContents = Util.readFile(file);
+
+        assertEquals(fileContents.replace("\r", ""), "TestList:\n" +
+                "- Test: Test\n" +
+                "- Test: Test\n");
+    }
+
+    @org.testng.annotations.Test(priority = 3)
+    public void loadConfig() throws InvalidConfigurationException {
+        ListConfig listConfig1 = new ListConfig();
+        listConfig1.load(file);
+
+        assertEquals(listConfig1.TestList.size(), 2);
     }
 }

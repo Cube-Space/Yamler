@@ -3,7 +3,6 @@ package net.cubespace.Yamler.Config;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +21,6 @@ public class Converter {
             Map section = root.getMap(path);
             Config obj = (Config) field.getType().cast(field.getType().newInstance());
             obj.loadFromMap(section);
-        } else if(List.class.isAssignableFrom(field.getType())) {
-            List list = (List) field.getType().newInstance();
         } else if(!clazz.getSimpleName().startsWith("class")) {
             switch(clazz.getSimpleName()) {
                 case "short":
@@ -53,9 +50,9 @@ public class Converter {
             root.set(path, ((Config) obj).saveToMap());
         } else if(obj instanceof List) {
             List list = (List) obj;
-            List newList = new ArrayList<>();
+            List newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-            if(Config.class.isAssignableFrom(parameterizedType.getActualTypeArguments()[0].getClass())) {
+            if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
                 for(int i = 0; i < list.size(); i++) {
                     newList.add(((Config) list.get(i)).saveToMap());
                 }
