@@ -1,4 +1,0 @@
-name: Yamler
-main : net.cubespace.Yamler.YamlerPlugin
-version: ${version}
-author: geNAZt
