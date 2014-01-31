@@ -1,5 +1,7 @@
 package net.cubespace.Yamler.Config;
 
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -14,7 +16,8 @@ public class Converter {
         Class clazz = field.getType();
 
         if (Map.class.isAssignableFrom(field.getType())) {
-            field.set(config, root.getMap(path));
+            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+            field.set(config, convertToMap(field, parameterizedType, root, path));
         } else if (field.getType().isArray()) {
             setList(config, field, field.getType().getComponentType(), (List) root.get(path));
         } else if (Config.class.isAssignableFrom(field.getType())) {
@@ -41,6 +44,20 @@ public class Converter {
         } else {
             field.set(config, root.get(path));
         }
+    }
+
+    public static Object convertToMap(Field field, ParameterizedType parameterizedType, ConfigSection root, String path) throws Exception {
+        Map map = ((Map) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
+
+        if(parameterizedType.getActualTypeArguments()[1] instanceof ParameterizedTypeImpl) {
+            for(Map.Entry<?, ?> entry : ((Map<?, ?>) root.getMap(path)).entrySet()) {
+                map.put(entry.getKey(), convertToMap(field, (ParameterizedType) parameterizedType.getActualTypeArguments()[1], root, path + "." + entry.getKey()));
+            }
+        } else {
+            return root.getMap(path);
+        }
+
+        return map;
     }
 
     public static void toConfig(Config config, Field field, ConfigSection root, String path) throws Exception {

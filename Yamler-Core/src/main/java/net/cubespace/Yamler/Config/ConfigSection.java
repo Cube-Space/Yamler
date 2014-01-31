@@ -21,7 +21,7 @@ public class ConfigSection {
 
     public ConfigSection(ConfigSection root, String key) {
         this.key = key;
-        this.fullPath = (!root.key.equals("")) ? root.key + "." + key : key;
+        this.fullPath = (!root.fullPath.equals("")) ? root.fullPath + "." + key : key;
         this.configFastLookupCache = root.configFastLookupCache;
         configFastLookupCache.set(fullPath, this);
     }
