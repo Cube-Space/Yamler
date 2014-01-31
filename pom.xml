@@ -10,8 +10,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Bungee</module>
-        <module>Bukkit</module>
+        <module>Yamler-Core</module>
+        <module>Yamler-Bungee</module>
+        <module>Yamler-Bukkit</module>
     </modules>
 
     <distributionManagement>
