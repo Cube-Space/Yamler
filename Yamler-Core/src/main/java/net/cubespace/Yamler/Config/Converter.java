@@ -25,6 +25,7 @@ public class Converter {
             Map section = root.getMap(path);
             Config obj = (Config) field.getType().cast(field.getType().newInstance());
             obj.loadFromMap(section);
+            field.set(config, obj);
         } else if(!clazz.getSimpleName().startsWith("class")) {
             switch(clazz.getSimpleName()) {
                 case "short":
