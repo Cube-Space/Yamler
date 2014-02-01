@@ -42,7 +42,7 @@ public class YamlConfigMapper extends ConfigBasic {
             Object object = yaml.load(fileReader);
 
             if(object != null)
-                convertMapsToSections((Map<?, ?>) yaml.load(fileReader), root);
+                convertMapsToSections((Map<?, ?>) object, root);
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
@@ -55,6 +55,8 @@ public class YamlConfigMapper extends ConfigBasic {
     }
 
     private void convertMapsToSections(Map<?, ?> input, ConfigSection section) {
+        if(input == null) return;
+
         for (Map.Entry<?, ?> entry : input.entrySet()) {
             String key = entry.getKey().toString();
             Object value = entry.getValue();
