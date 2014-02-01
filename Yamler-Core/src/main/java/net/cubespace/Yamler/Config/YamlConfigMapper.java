@@ -91,8 +91,34 @@ public class YamlConfigMapper extends ConfigBasic {
                     if (line.startsWith(new String(new char[depth - 2]).replace("\0", " "))) {
                         keyChain.remove(keyChain.size()-1);
                     } else {
-                        depth = 2;
-                        keyChain = new ArrayList<>();
+                        //Check how much spaces are infront of the line
+                        int spaces = 0;
+                        for(int i = 0; i < line.length(); i++) {
+                            if(line.charAt(i) == ' ') {
+                                spaces++;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        depth = spaces;
+
+                        if(spaces == 0) {
+                            keyChain = new ArrayList<>();
+                            depth = 2;
+                        }
+
+                        else {
+                            ArrayList<String> temp = new ArrayList<>();
+                            int index = 0;
+                            for(int i = 0; i < spaces; i = i+2, index++) {
+                                temp.add(keyChain.get(index));
+                            }
+
+                            keyChain = temp;
+
+                            depth = depth + 2;
+                        }
                     }
 
                     keyChain.add(line.split(":")[0].trim());
