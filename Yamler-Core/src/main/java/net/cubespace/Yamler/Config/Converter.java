@@ -5,6 +5,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,11 @@ public class Converter {
             root.set(path, ((Config) obj).saveToMap());
         } else if(obj instanceof List) {
             List list = (List) obj;
-            List newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
+            List newList = new ArrayList();
+            try {
+                newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
+            } catch (Exception e) {}
+
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
             if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
                 for(int i = 0; i < list.size(); i++) {
