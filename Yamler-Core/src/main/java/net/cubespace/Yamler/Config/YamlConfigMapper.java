@@ -42,7 +42,7 @@ public class YamlConfigMapper extends ConfigBasic {
             Object object = yaml.load(fileReader);
 
             if(object != null)
-                convertMapsToSections((Map<?, ?>) yaml.load(new FileReader(CONFIG_FILE)), root);
+                convertMapsToSections((Map<?, ?>) yaml.load(fileReader), root);
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
