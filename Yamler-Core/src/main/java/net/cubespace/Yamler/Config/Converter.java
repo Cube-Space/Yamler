@@ -77,7 +77,10 @@ public class Converter {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
             if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
                 for(int i = 0; i < list.size(); i++) {
-                    newList.add(((Config) list.get(i)).saveToMap());
+                    if(list.get(i) instanceof Config)
+                        newList.add(((Config) list.get(i)).saveToMap());
+                    else
+                        newList.add(list.get(i));
                 }
             } else {
                 newList = list;
