@@ -172,6 +172,10 @@ public class YamlConfigMapper extends ConfigBasic {
         comments.get(key).add(value);
     }
 
+    public void clearComments() {
+        comments.clear();
+    }
+
     public Map getInnerMap(String path) {
         return root.getMap(path);
     }

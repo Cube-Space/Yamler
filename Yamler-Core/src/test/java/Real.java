@@ -113,5 +113,90 @@ public class Real {
                 "  - z: 0\n" +
                 "    y: 50\n" +
                 "    x: 0\n");
+
+        realConfig.save();
+
+        fileContents = Util.readFile(file);
+        Assert.assertEquals(fileContents.replace("\r", ""), "# Database configuration.\n" +
+                "database:\n" +
+                "  # The database JDBC address. Should replace dbname with the database name.\n" +
+                "  address: jdbc:mysql://localhost/dbname\n" +
+                "  # The table to use within given database\n" +
+                "  table: RushPlugin\n" +
+                "  # Database username, if applicable. Leave empty if unneeded\n" +
+                "  username: ''\n" +
+                "  # Database password, if applicable. Leave empty if unneeded\n" +
+                "  password: ''\n" +
+                "# Gameplay settings\n" +
+                "gameplay:\n" +
+                "  # Delay in minutes during which players cannot break beds.\n" +
+                "  bedBreakDelay: 60\n" +
+                "  # Amount of players each team needs before starting the game.\n" +
+                "  playersPerTeam: 4\n" +
+                "  # Amount of teams in the game.\n" +
+                "  # Can be 2, 3, 4 or 6\n" +
+                "  teams: 2\n" +
+                "  # Delay in seconds before starting the game\n" +
+                "  gameStartDelay: 10\n" +
+                "  # Delay in seconds for forced respawn after death.\n" +
+                "  respawnDelay: 10\n" +
+                "# Score system settings\n" +
+                "scoring:\n" +
+                "  # Points earned when winning the game\n" +
+                "  win: 4\n" +
+                "  # Points lost when losing the game\n" +
+                "  lose: 2\n" +
+                "  # Points earned when killing an enemy\n" +
+                "  kill: 2\n" +
+                "  # Points lost when getting killed\n" +
+                "  death: 1\n" +
+                "# Economy settings\n" +
+                "economy:\n" +
+                "  # Money earned when winning the game\n" +
+                "  win: 4\n" +
+                "  # Money lost when losing the game\n" +
+                "  lose: 2\n" +
+                "  # Points earned when killing an enemy\n" +
+                "  kill: 2\n" +
+                "  # Points lost when getting killed\n" +
+                "  death: 1\n" +
+                "# Game Setup\n" +
+                "setup:\n" +
+                "  # Game world\n" +
+                "  world: world\n" +
+                "  # Server to move players to after game over\n" +
+                "  hubServer: hub\n" +
+                "  # Position of the lobby\n" +
+                "  lobbyPosition:\n" +
+                "    z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  # Position of each spawns\n" +
+                "  spawnPosition:\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n" +
+                "  - z: 0\n" +
+                "    y: 50\n" +
+                "    x: 0\n");
+
     }
 }

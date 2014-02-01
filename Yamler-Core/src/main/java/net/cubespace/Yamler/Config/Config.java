@@ -16,6 +16,8 @@ public class Config extends MapConfigMapper implements IConfig {
             throw new IllegalArgumentException("Saving a config without given File");
         }
 
+        clearComments();
+
         for (Field field : getClass().getDeclaredFields()) {
             String path = field.getName().replaceAll("_", ".");
 
