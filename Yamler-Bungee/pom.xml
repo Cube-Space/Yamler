@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Bungee</artifactId>
+    <artifactId>Yamler-Bungee</artifactId>
     <version>${project.parent.version}</version>
 
     <parent>
@@ -39,16 +39,23 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>snapshot-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.7-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>net.cubespace</groupId>
             <artifactId>Yamler-Core</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
