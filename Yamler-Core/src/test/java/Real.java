@@ -35,11 +35,12 @@ public class Real {
         realConfig.save();
 
         RealConfig config = new RealConfig();
-        config.init(file);
+        config.load(file);
 
         Assert.assertEquals(config.getSetup_lobbyPosition().getX(), 123);
         Assert.assertEquals(config.getSetup_lobbyPosition().getY(), 135);
         Assert.assertEquals(config.getSetup_lobbyPosition().getZ(), 456);
+        Assert.assertTrue(config.getSetup_spawnPosition().get(0) instanceof Position);
     }
 
     @Test(priority = 2)

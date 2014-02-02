@@ -14,8 +14,6 @@ import java.util.Map;
  */
 public class Converter {
     public static void fromConfig(Config config, Field field, ConfigSection root, String path) throws Exception {
-        Class clazz = field.getType();
-
         if (Map.class.isAssignableFrom(field.getType())) {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
             field.set(config, convertToMap(field, parameterizedType, root, path));
@@ -26,8 +24,28 @@ public class Converter {
             Config obj = (Config) field.getType().cast(field.getType().newInstance());
             obj.loadFromMap(section);
             field.set(config, obj);
-        } else if(!clazz.getSimpleName().startsWith("class")) {
-            switch(clazz.getSimpleName()) {
+        } else if(List.class.isAssignableFrom(field.getType())) {
+            List newList = new ArrayList();
+            try {
+                newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
+            } catch (Exception e) {}
+
+            List values = root.get(path);
+
+            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+            if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
+                for(int i = 0; i < values.size(); i++) {
+                    Config config1 = (Config) ((Class) parameterizedType.getActualTypeArguments()[0]).newInstance();
+                    config1.loadFromMap((Map)values.get(i));
+                    newList.add(config1);
+                }
+            } else {
+                newList = values;
+            }
+
+            field.set(config, newList);
+        } else {
+            switch(field.getType().getSimpleName()) {
                 case "short":
                     field.set(config, (new Integer((int)root.get(path)).shortValue()));
                     break;
@@ -43,8 +61,6 @@ public class Converter {
                 default:
                     field.set(config, root.get(path));
             }
-        } else {
-            field.set(config, root.get(path));
         }
     }
 
