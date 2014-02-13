@@ -25,25 +25,7 @@ public class Converter {
             obj.loadFromMap(section);
             field.set(config, obj);
         } else if(List.class.isAssignableFrom(field.getType())) {
-            List newList = new ArrayList();
-            try {
-                newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
-            } catch (Exception e) {}
-
-            List values = root.get(path);
-
-            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-            if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
-                for(int i = 0; i < values.size(); i++) {
-                    Config config1 = (Config) ((Class) parameterizedType.getActualTypeArguments()[0]).newInstance();
-                    config1.loadFromMap((Map)values.get(i));
-                    newList.add(config1);
-                }
-            } else {
-                newList = values;
-            }
-
-            field.set(config, newList);
+            field.set(config, getList(root, path, (ParameterizedType) field.getGenericType()));
         } else {
             switch(field.getType().getSimpleName()) {
                 case "short":
@@ -64,14 +46,39 @@ public class Converter {
         }
     }
 
+    private static List getList(ConfigSection root, String path, ParameterizedType type) throws Exception {
+        List newList = new ArrayList();
+        try {
+            newList = ((List) ((Class) type.getRawType()).newInstance());
+        } catch (Exception e) {}
+
+        List values = root.get(path);
+
+        if(Config.class.isAssignableFrom((Class) type.getActualTypeArguments()[0])) {
+            for(int i = 0; i < values.size(); i++) {
+                Config config1 = (Config) ((Class) type.getActualTypeArguments()[0]).newInstance();
+                config1.loadFromMap((Map)values.get(i));
+                newList.add(config1);
+            }
+        } else {
+            newList = values;
+        }
+
+        return newList;
+    }
+
     public static Object convertToMap(Field field, ParameterizedType parameterizedType, ConfigSection root, String path) throws Exception {
         Map map = ((Map) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
 
-        if(parameterizedType.getActualTypeArguments()[1] instanceof ParameterizedTypeImpl) {
+        if(parameterizedType.getActualTypeArguments().length == 2 && parameterizedType.getActualTypeArguments()[1] instanceof ParameterizedTypeImpl) {
             for(Map.Entry<?, ?> entry : ((Map<?, ?>) root.getMap(path)).entrySet()) {
                 map.put(entry.getKey(), convertToMap(field, (ParameterizedType) parameterizedType.getActualTypeArguments()[1], root, path + "." + entry.getKey()));
             }
         } else {
+            if (List.class.isAssignableFrom((Class)parameterizedType.getRawType())) {
+                return getList(root, path, parameterizedType);
+            }
+
             return root.getMap(path);
         }
 
