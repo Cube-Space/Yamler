@@ -42,7 +42,7 @@ public class Config extends MapConfigMapper implements IConfig {
                 field.setAccessible(true);
 
             try {
-                Converter.toConfig(this, field, root, path);
+                InternalConverter.toConfig(this, field, root, path);
             } catch (Exception e) {
                 throw new InvalidConfigurationException("Could not save the Field", e);
             }
@@ -112,13 +112,13 @@ public class Config extends MapConfigMapper implements IConfig {
 
             if (root.has(path)) {
                 try {
-                    Converter.fromConfig(this, field, root, path);
+                    InternalConverter.fromConfig(this, field, root, path);
                 } catch (Exception e) {
                     throw new InvalidConfigurationException("Could not set field", e);
                 }
             } else {
                 try {
-                    Converter.toConfig(this, field, root, path);
+                    InternalConverter.toConfig(this, field, root, path);
                     save = true;
                 } catch (Exception e) {
                     throw new InvalidConfigurationException("Could not get field", e);

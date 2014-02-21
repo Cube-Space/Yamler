@@ -37,7 +37,17 @@ public class MultiValueMap {
         Assert.assertEquals(fileContents.replace("\r", ""), "items:\n" +
                 "  example:\n" +
                 "  - BOOK\n" +
-                "  - WRITTEN_BOOK\n");
+                "  - WRITTEN_BOOK\n" +
+                "servers:\n" +
+                "  default:\n" +
+                "    servers:\n" +
+                "    - server_one\n" +
+                "    - server_two\n" +
+                "    item:\n" +
+                "      name: '&6Server Name'\n" +
+                "      type: ENCHANTED_BOOK\n" +
+                "intMap:\n" +
+                "  1: []\n");
     }
 
     @org.testng.annotations.Test(priority = 2)
@@ -53,7 +63,17 @@ public class MultiValueMap {
                 "  example:\n" +
                 "  - BOOK\n" +
                 "  - WRITTEN_BOOK\n" +
-                "  - Test\n");
+                "  - Test\n" +
+                "servers:\n" +
+                "  default:\n" +
+                "    servers:\n" +
+                "    - server_one\n" +
+                "    - server_two\n" +
+                "    item:\n" +
+                "      name: '&6Server Name'\n" +
+                "      type: ENCHANTED_BOOK\n" +
+                "intMap:\n" +
+                "  1: []\n");
     }
 
     @org.testng.annotations.Test(priority = 3)
@@ -64,5 +84,6 @@ public class MultiValueMap {
         Assert.assertEquals(multiValueMapConfig1.getItems().size(), 2);
         Assert.assertTrue(multiValueMapConfig1.getItems().containsKey("example"));
         Assert.assertEquals(multiValueMapConfig1.getItems().get("example").size(), 3);
+        Assert.assertTrue(multiValueMapConfig1.getIntMap().keySet().contains(1));
     }
 }

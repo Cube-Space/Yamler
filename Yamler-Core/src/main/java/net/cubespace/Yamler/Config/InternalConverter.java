@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class Converter {
+public class InternalConverter {
     public static void fromConfig(Config config, Field field, ConfigSection root, String path) throws Exception {
         if (Map.class.isAssignableFrom(field.getType())) {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -71,8 +71,26 @@ public class Converter {
         Map map = ((Map) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
 
         if(parameterizedType.getActualTypeArguments().length == 2 && parameterizedType.getActualTypeArguments()[1] instanceof ParameterizedTypeImpl) {
+            Class keyClass = ((Class) parameterizedType.getActualTypeArguments()[0]);
+
             for(Map.Entry<?, ?> entry : ((Map<?, ?>) root.getMap(path)).entrySet()) {
-                map.put(entry.getKey(), convertToMap(field, (ParameterizedType) parameterizedType.getActualTypeArguments()[1], root, path + "." + entry.getKey()));
+                Object key;
+
+                if (keyClass.equals(Integer.class)) {
+                    key = Integer.valueOf((String) entry.getKey());
+                } else if (keyClass.equals(Short.class)) {
+                    key = Short.valueOf((String) entry.getKey());
+                } else if (keyClass.equals(Byte.class)) {
+                    key = Byte.valueOf((String) entry.getKey());
+                } else if (keyClass.equals(Float.class)) {
+                    key = Float.valueOf((String) entry.getKey());
+                } else if (keyClass.equals(Double.class)) {
+                    key = Double.valueOf((String) entry.getKey());
+                } else {
+                    key = entry.getKey();
+                }
+
+                map.put(key, convertToMap(field, (ParameterizedType) parameterizedType.getActualTypeArguments()[1], root, path + "." + entry.getKey()));
             }
         } else {
             if (List.class.isAssignableFrom((Class)parameterizedType.getRawType())) {

@@ -10,7 +10,7 @@ public class ConfigSection {
     private String key;
     private String fullPath;
     private ConfigFastLookupCache configFastLookupCache;
-    protected final Map<String, Object> map = new LinkedHashMap<>();
+    protected final Map<Object, Object> map = new LinkedHashMap<>();
 
     public ConfigSection() {
         this.key = "";
@@ -92,11 +92,11 @@ public class ConfigSection {
         }
     }
 
-    protected void mapChildrenValues(Map<String, Object> output, ConfigSection section, boolean deep) {
+    protected void mapChildrenValues(Map<Object, Object> output, ConfigSection section, boolean deep) {
         if (section != null) {
-             for (Map.Entry<String, Object> entry : section.map.entrySet()) {
+             for (Map.Entry<Object, Object> entry : section.map.entrySet()) {
                 if (entry.getValue() instanceof ConfigSection) {
-                    Map<String, Object> result = new LinkedHashMap<>();
+                    Map<Object, Object> result = new LinkedHashMap<>();
                     output.put(entry.getKey(), result);
                     if (deep) {
                         mapChildrenValues(result, (ConfigSection) entry.getValue(), true);
@@ -106,9 +106,9 @@ public class ConfigSection {
                 }
             }
         } else {
-            Map<String, Object> values = section.getValues(deep);
+            Map<Object, Object> values = section.getValues(deep);
 
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
+            for (Map.Entry<Object, Object> entry : values.entrySet()) {
                 output.put(section.fullPath + "." + entry.getKey(), entry.getValue());
             }
         }
@@ -118,8 +118,8 @@ public class ConfigSection {
         return ((ConfigSection) configFastLookupCache.get(path)).getRawMap();
     }
 
-    public Map<String, Object> getValues(boolean deep) {
-        Map<String, Object> result = new LinkedHashMap<>();
+    public Map<Object, Object> getValues(boolean deep) {
+        Map<Object, Object> result = new LinkedHashMap<>();
         mapChildrenValues(result, this, deep);
         return result;
     }
