@@ -13,7 +13,7 @@ public class MapConfigMapper extends YamlConfigMapper {
         Map<String, Object> returnMap = new HashMap<>();
 
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("_", ".");
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             if (doSkip(field)) continue;
 
@@ -32,7 +32,7 @@ public class MapConfigMapper extends YamlConfigMapper {
 
     public void loadFromMap(Map section) throws NoSuchFieldException, IllegalAccessException {
         for(Map.Entry<String, Object> entry : ((Map<String, Object>) section).entrySet()) {
-            String path = entry.getKey().replace(".", "_");
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? entry.getKey().replace(".", "_") : entry.getKey();
 
             Field field = this.getClass().getDeclaredField(path);
 

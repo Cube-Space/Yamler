@@ -19,7 +19,7 @@ public class Config extends MapConfigMapper implements IConfig {
         clearComments();
 
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("_", ".");
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             if (doSkip(field)) continue;
 
@@ -103,7 +103,7 @@ public class Config extends MapConfigMapper implements IConfig {
 
         boolean save = false;
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("_", ".");
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             if (doSkip(field)) continue;
 

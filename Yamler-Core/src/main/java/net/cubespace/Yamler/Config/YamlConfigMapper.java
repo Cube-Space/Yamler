@@ -6,7 +6,6 @@ import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,9 +18,6 @@ import java.util.Map;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class YamlConfigMapper extends ConfigBasic {
-    protected transient File CONFIG_FILE = null;
-    protected transient String[] CONFIG_HEADER = null;
-
     private transient Yaml yaml;
     protected transient ConfigSection root = new ConfigSection();
     private transient HashMap<String, ArrayList<String>> comments = new HashMap<>();
