@@ -10,6 +10,15 @@ import java.lang.reflect.Modifier;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class Config extends MapConfigMapper implements IConfig {
+    public Config() {
+
+    }
+
+    public Config(String filename, String ... header) {
+        CONFIG_FILE = new File(filename + (filename.endsWith(".yml") ? "" : ".yml"));
+        CONFIG_HEADER = header;
+    }
+
     @Override
     public void save() throws InvalidConfigurationException {
         if (CONFIG_FILE == null) {
