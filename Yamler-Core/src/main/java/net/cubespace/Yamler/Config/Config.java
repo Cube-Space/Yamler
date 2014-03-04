@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -32,18 +34,29 @@ public class Config extends MapConfigMapper implements IConfig {
 
             if (doSkip(field)) continue;
 
+            ArrayList<String> comments = new ArrayList<>();
             for (Annotation annotation : field.getAnnotations()) {
                 if (annotation instanceof Comment) {
                     Comment comment = (Comment) annotation;
-                    addComment(path, comment.value());
+                    comments.add(comment.value());
+
                 }
 
                 if (annotation instanceof Comments) {
                     Comments comment = (Comments) annotation;
 
-                    for (String comment1 : comment.value()) {
-                        addComment(path, comment1);
-                    }
+                    comments.addAll(Arrays.asList(comment.value()));
+                }
+
+                if (annotation instanceof Path) {
+                    Path path1 = (Path) annotation;
+                    path = path1.value();
+                }
+            }
+
+            if(comments.size() > 0) {
+                for(String comment : comments) {
+                    addComment(path, comment);
                 }
             }
 
@@ -114,9 +127,16 @@ public class Config extends MapConfigMapper implements IConfig {
         for (Field field : getClass().getDeclaredFields()) {
             String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
+            for (Annotation annotation : field.getAnnotations()) {
+                if (annotation instanceof Path) {
+                    Path path1 = (Path) annotation;
+                    path = path1.value();
+                }
+            }
+
             if (doSkip(field)) continue;
 
-            if(Modifier.isPrivate(field.getModifiers()))
+            if (Modifier.isPrivate(field.getModifiers()))
                 field.setAccessible(true);
 
             if (root.has(path)) {
