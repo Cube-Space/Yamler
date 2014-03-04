@@ -16,7 +16,7 @@ public class Config extends MapConfigMapper implements IConfig {
 
     }
 
-    public Config(String filename, String ... header) {
+    public Config(String filename, String... header) {
         CONFIG_FILE = new File(filename + (filename.endsWith(".yml") ? "" : ".yml"));
         CONFIG_HEADER = header;
     }
@@ -29,7 +29,17 @@ public class Config extends MapConfigMapper implements IConfig {
 
         clearComments();
 
-        for (Field field : getClass().getDeclaredFields()) {
+        internalSave(getClass());
+
+        saveToYaml();
+    }
+
+    private void internalSave(Class clazz) throws InvalidConfigurationException {
+        if (!clazz.getSuperclass().equals(Config.class)) {
+            internalSave(clazz.getSuperclass());
+        }
+
+        for (Field field : clazz.getDeclaredFields()) {
             String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             if (doSkip(field)) continue;
@@ -54,13 +64,13 @@ public class Config extends MapConfigMapper implements IConfig {
                 }
             }
 
-            if(comments.size() > 0) {
-                for(String comment : comments) {
+            if (comments.size() > 0) {
+                for (String comment : comments) {
                     addComment(path, comment);
                 }
             }
 
-            if(Modifier.isPrivate(field.getModifiers()))
+            if (Modifier.isPrivate(field.getModifiers()))
                 field.setAccessible(true);
 
             try {
@@ -69,8 +79,6 @@ public class Config extends MapConfigMapper implements IConfig {
                 throw new InvalidConfigurationException("Could not save the Field", e);
             }
         }
-
-        saveToYaml();
     }
 
     @Override
@@ -123,8 +131,16 @@ public class Config extends MapConfigMapper implements IConfig {
 
         loadFromYaml();
 
+        internalLoad(getClass());
+    }
+
+    private void internalLoad(Class clazz) throws InvalidConfigurationException {
+        if (!clazz.getSuperclass().equals(Config.class)) {
+            internalLoad(clazz.getSuperclass());
+        }
+
         boolean save = false;
-        for (Field field : getClass().getDeclaredFields()) {
+        for (Field field : clazz.getDeclaredFields()) {
             String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             for (Annotation annotation : field.getAnnotations()) {
