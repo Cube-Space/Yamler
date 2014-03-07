@@ -34,6 +34,8 @@ public class YamlConfigMapper extends ConfigBasic {
     }
 
     protected void loadFromYaml() throws InvalidConfigurationException {
+        root = new ConfigSection();
+
         try (FileReader fileReader = new FileReader(CONFIG_FILE)) {
             Object object = yaml.load(fileReader);
 
@@ -42,12 +44,6 @@ public class YamlConfigMapper extends ConfigBasic {
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
-    }
-
-    protected void reloadFromYaml() throws InvalidConfigurationException {
-        root = new ConfigSection();
-
-        loadFromYaml();
     }
 
     private void convertMapsToSections(Map<?, ?> input, ConfigSection section) {

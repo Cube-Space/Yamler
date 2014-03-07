@@ -120,7 +120,8 @@ public class Config extends MapConfigMapper implements IConfig {
 
     @Override
     public void reload() throws InvalidConfigurationException {
-        reloadFromYaml();
+        loadFromYaml();
+        internalLoad(getClass());
     }
 
     @Override
