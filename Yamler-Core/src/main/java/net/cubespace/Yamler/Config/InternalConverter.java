@@ -1,142 +1,102 @@
 package net.cubespace.Yamler.Config;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import net.cubespace.Yamler.Config.Converter.Converter;
+import net.cubespace.Yamler.Config.Converter.Primitive;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedHashSet;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class InternalConverter {
-    public static void fromConfig(Config config, Field field, ConfigSection root, String path) throws Exception {
-        if (Map.class.isAssignableFrom(field.getType())) {
-            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-            field.set(config, convertToMap(field, parameterizedType, root, path));
-        } else if (field.getType().isArray()) {
-            setList(config, field, field.getType().getComponentType(), (List) root.get(path));
-        } else if (Config.class.isAssignableFrom(field.getType())) {
-            Map section = root.getMap(path);
-            Config obj = (Config) field.getType().cast(field.getType().newInstance());
-            obj.loadFromMap(section);
-            field.set(config, obj);
-        } else if(List.class.isAssignableFrom(field.getType())) {
-            field.set(config, getList(root, path, (ParameterizedType) field.getGenericType()));
-        } else {
-            switch(field.getType().getSimpleName()) {
-                case "short":
-                    field.set(config, (new Integer((int)root.get(path)).shortValue()));
-                    break;
-                case "byte":
-                    field.set(config, (new Integer((int)root.get(path)).byteValue()));
-                    break;
-                case "float":
-                    field.set(config, (new Double((double)root.get(path)).floatValue()));
-                    break;
-                case "char":
-                    field.set(config, ((String)root.get(path)).charAt(0));
-                    break;
-                default:
-                    field.set(config, root.get(path));
-            }
-        }
-    }
+    private static LinkedHashSet<Converter> converters;
 
-    private static List getList(ConfigSection root, String path, ParameterizedType type) throws Exception {
-        List newList = new ArrayList();
+    static {
+        converters = new LinkedHashSet<>();
+        addConverter(new Primitive());
+        addConverter(new net.cubespace.Yamler.Config.Converter.Config());
+        addConverter(new net.cubespace.Yamler.Config.Converter.List());
+        addConverter(new net.cubespace.Yamler.Config.Converter.Map());
+        addConverter(new net.cubespace.Yamler.Config.Converter.Array());
+
+        /* //Optional GuavaImmutables support
         try {
-            newList = ((List) ((Class) type.getRawType()).newInstance());
-        } catch (Exception e) {}
-
-        List values = root.get(path);
-
-        if(Config.class.isAssignableFrom((Class) type.getActualTypeArguments()[0])) {
-            for(int i = 0; i < values.size(); i++) {
-                Config config1 = (Config) ((Class) type.getActualTypeArguments()[0]).newInstance();
-                config1.loadFromMap((Map)values.get(i));
-                newList.add(config1);
-            }
-        } else {
-            newList = values;
-        }
-
-        return newList;
+            addConverter(new GuavaImmutables());
+        } catch(Exception e) {} */
     }
 
-    public static Object convertToMap(Field field, ParameterizedType parameterizedType, ConfigSection root, String path) throws Exception {
-        Map map = ((Map) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
+    public static void addConverter(Converter converter) {
+        converters.add(converter);
+    }
 
-        if(parameterizedType.getActualTypeArguments().length == 2 && parameterizedType.getActualTypeArguments()[1] instanceof ParameterizedTypeImpl) {
-            Class keyClass = ((Class) parameterizedType.getActualTypeArguments()[0]);
-
-            for(Map.Entry<?, ?> entry : ((Map<?, ?>) root.getMap(path)).entrySet()) {
-                Object key;
-
-                if (keyClass.equals(Integer.class)) {
-                    key = Integer.valueOf((String) entry.getKey());
-                } else if (keyClass.equals(Short.class)) {
-                    key = Short.valueOf((String) entry.getKey());
-                } else if (keyClass.equals(Byte.class)) {
-                    key = Byte.valueOf((String) entry.getKey());
-                } else if (keyClass.equals(Float.class)) {
-                    key = Float.valueOf((String) entry.getKey());
-                } else if (keyClass.equals(Double.class)) {
-                    key = Double.valueOf((String) entry.getKey());
-                } else {
-                    key = entry.getKey();
-                }
-
-                map.put(key, convertToMap(field, (ParameterizedType) parameterizedType.getActualTypeArguments()[1], root, path + "." + entry.getKey()));
+    public static Converter getConverter(Class type) {
+        for(Converter converter : converters) {
+            if (converter.supports(type)) {
+                return converter;
             }
-        } else {
-            if (List.class.isAssignableFrom((Class)parameterizedType.getRawType())) {
-                return getList(root, path, parameterizedType);
-            }
-
-            return root.getMap(path);
         }
 
-        return map;
+        return null;
+    }
+
+    public static void fromConfig(Config config, Field field, ConfigSection root, String path) throws Exception {
+        Object obj = field.get(config);
+
+        Converter converter;
+
+        if (obj != null) {
+            converter = getConverter(field.get(config).getClass());
+
+            if (converter != null) {
+                field.set(config, converter.fromConfig(obj.getClass(), root.get(path), (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                return;
+            } else {
+                converter = getConverter(field.getType());
+                if (converter != null) {
+                    field.set(config, converter.fromConfig(field.getType(), root.get(path), (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                    return;
+                }
+            }
+        } else {
+            converter = getConverter(field.getType());
+
+            if (converter != null) {
+                field.set(config, converter.fromConfig(field.getType(), root.get(path), (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                return;
+            }
+        }
+
+        field.set(config, root.get(path));
     }
 
     public static void toConfig(Config config, Field field, ConfigSection root, String path) throws Exception {
         Object obj = field.get(config);
 
-        if(obj instanceof Config) {
-            root.set(path, ((Config) obj).saveToMap());
-        } else if(obj instanceof List) {
-            List list = (List) obj;
-            List newList = new ArrayList();
-            try {
-                newList = ((List) ((Class) ((ParameterizedType) field.getGenericType()).getRawType()).newInstance());
-            } catch (Exception e) {}
+        Converter converter;
 
-            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-            if(Config.class.isAssignableFrom((Class) parameterizedType.getActualTypeArguments()[0])) {
-                for(int i = 0; i < list.size(); i++) {
-                    if(list.get(i) instanceof Config)
-                        newList.add(((Config) list.get(i)).saveToMap());
-                    else
-                        newList.add(list.get(i));
-                }
+        if (obj != null) {
+            converter = getConverter(obj.getClass());
+
+            if (converter != null) {
+                root.set(path, converter.toConfig(obj.getClass(), obj, (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                return;
             } else {
-                newList = list;
+                converter = getConverter(field.getType());
+                if (converter != null) {
+                    root.set(path, converter.toConfig(field.getType(), obj, (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                    return;
+                }
             }
-
-            root.set(path, newList);
         } else {
-            root.set(path, obj);
+            converter = getConverter(field.getType());
+            if (converter != null) {
+                root.set(path, converter.toConfig(field.getType(), obj, (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
+                return;
+            }
         }
-    }
 
-    private static <T> void setList(Config config, Field field, Class<T> type, List list) {
-        try {
-            T[] array = (T[]) Array.newInstance(type, list.size());
-            field.set(config, list.toArray(array));
-        } catch (IllegalAccessException e) { }
+        root.set(path, obj);
     }
 }
