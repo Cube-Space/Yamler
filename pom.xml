@@ -22,6 +22,10 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <properties>
+        <build.number>${BUILD_NUMBER}</build.number>
+    </properties>
+
     <build>
         <defaultGoal>clean deploy</defaultGoal>
         <resources>
