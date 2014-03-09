@@ -22,10 +22,6 @@
         </snapshotRepository>
     </distributionManagement>
 
-    <properties>
-        <build.number>${BUILD_NUMBER}</build.number>
-    </properties>
-
     <build>
         <defaultGoal>clean deploy</defaultGoal>
         <resources>
@@ -114,5 +110,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <build.number>${BUILD_NUMBER}</build.number>
     </properties>
 </project>
