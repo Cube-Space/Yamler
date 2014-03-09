@@ -1,11 +1,19 @@
 package net.cubespace.Yamler.Config.Converter;
 
+import net.cubespace.Yamler.Config.InternalConverter;
+
 import java.lang.reflect.ParameterizedType;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class Array implements Converter {
+    private InternalConverter internalConverter;
+
+    public Array(InternalConverter internalConverter) {
+        this.internalConverter = internalConverter;
+    }
+
     @Override
     public Object toConfig(Class<?> type, Object obj, ParameterizedType parameterizedType) throws Exception {
         return obj;

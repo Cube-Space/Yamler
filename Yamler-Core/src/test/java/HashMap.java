@@ -36,7 +36,12 @@ public class HashMap {
         Assert.assertEquals(fileContents.replace("\r", ""), "TestHashMap:\n" +
                 "  test:\n" +
                 "    test:\n" +
-                "      test1: tesw\n");
+                "      test1: tesw\n" +
+                "TestMap1:\n" +
+                "  test:\n" +
+                "    z: 0\n" +
+                "    y: 0\n" +
+                "    x: 0\n");
     }
 
     @Test(priority = 2)
@@ -54,7 +59,12 @@ public class HashMap {
                 "    test1:\n" +
                 "      tre: tew\n" +
                 "    test:\n" +
-                "      test1: tesw\n");
+                "      test1: tesw\n" +
+                "TestMap1:\n" +
+                "  test:\n" +
+                "    z: 0\n" +
+                "    y: 0\n" +
+                "    x: 0\n");
     }
 
     @Test(priority = 2)

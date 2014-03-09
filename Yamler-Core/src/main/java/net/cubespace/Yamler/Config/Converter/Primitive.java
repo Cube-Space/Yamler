@@ -1,5 +1,7 @@
 package net.cubespace.Yamler.Config.Converter;
 
+import net.cubespace.Yamler.Config.InternalConverter;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
 
@@ -17,6 +19,12 @@ public class Primitive implements Converter {
         add("float");
         add("double");
     }};
+
+    private InternalConverter internalConverter;
+
+    public Primitive(InternalConverter internalConverter) {
+        this.internalConverter = internalConverter;
+    }
 
     @Override
     public Object toConfig(Class<?> type, Object obj, ParameterizedType parameterizedType) throws Exception {

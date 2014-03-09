@@ -41,6 +41,8 @@ public class YamlConfigMapper extends ConfigBasic {
 
             if(object != null)
                 convertMapsToSections((Map<?, ?>) object, root);
+
+            update(root);
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
