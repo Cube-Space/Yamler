@@ -4,6 +4,7 @@ import net.cubespace.Yamler.Config.ConfigSection;
 import net.cubespace.Yamler.Config.InternalConverter;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.HashMap;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -45,7 +46,12 @@ public class Map implements Converter {
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
         if (genericType != null) {
 
-            java.util.Map map = ((java.util.Map) ((Class) genericType.getRawType()).newInstance());
+            java.util.Map map;
+            try {
+                map = ((java.util.Map) ((Class) genericType.getRawType()).newInstance());
+            } catch (InstantiationException e) {
+                map = new HashMap();
+            }
 
             if(genericType.getActualTypeArguments().length == 2 ) {
                 Class keyClass = ((Class) genericType.getActualTypeArguments()[0]);
