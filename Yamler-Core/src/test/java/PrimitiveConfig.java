@@ -1,4 +1,5 @@
 import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.ConfigSection;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -12,4 +13,9 @@ public class PrimitiveConfig extends Config {
     public float TestFloat = 0.0001F;
     public long TestLong = 1684654679684L;
     public char TestChar = 'c';
+
+    public void update(ConfigSection config) {
+        config.set("TestInjectUpdate", "true");
+        config.remove("TestInt");
+    }
 }

@@ -61,7 +61,7 @@ public class Private {
     }
 
     @Test(priority = 3)
-    public void loadConfig() throws InvalidConfigurationException {
+    public void loadConfig() throws Exception {
         PrivateConfig privateConfig1 = new PrivateConfig();
         privateConfig1.load(file);
 

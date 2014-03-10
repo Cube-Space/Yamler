@@ -27,6 +27,10 @@ public class Config extends MapConfigMapper implements IConfig {
             throw new IllegalArgumentException("Saving a config without given File");
         }
 
+        if (root == null) {
+            root = new ConfigSection();
+        }
+
         clearComments();
 
         internalSave(getClass());
@@ -131,7 +135,7 @@ public class Config extends MapConfigMapper implements IConfig {
         }
 
         loadFromYaml();
-
+        update(root);
         internalLoad(getClass());
     }
 

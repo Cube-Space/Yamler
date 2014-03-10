@@ -61,10 +61,25 @@ public class Primitive {
     }
 
     @org.testng.annotations.Test(priority = 3)
-    public void loadConfig() throws InvalidConfigurationException {
+    public void loadConfig() throws Exception {
         PrimitiveConfig primitiveConfig1 = new PrimitiveConfig();
+
         primitiveConfig1.load(file);
 
         Assert.assertEquals(primitiveConfig1.TestBoolean, true);
+
+        primitiveConfig1.save();
+
+        String fileContents = Util.readFile(file);
+
+        Assert.assertEquals(fileContents.replace("\r", ""), "TestBoolean: true\n" +
+                "TestShort: 0\n" +
+                "TestByte: 0\n" +
+                "TestDouble: 1.0E-7\n" +
+                "TestFloat: 1.0E-4\n" +
+                "TestLong: 1684654679684\n" +
+                "TestChar: c\n" +
+                "TestInjectUpdate: 'true'\n" +
+                "TestInt: 0\n");
     }
 }

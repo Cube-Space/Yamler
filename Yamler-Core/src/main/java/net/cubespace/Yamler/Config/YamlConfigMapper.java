@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class YamlConfigMapper extends ConfigBasic {
     private transient Yaml yaml;
-    protected transient ConfigSection root = new ConfigSection();
+    protected transient ConfigSection root;
     private transient HashMap<String, ArrayList<String>> comments = new HashMap<>();
     private transient Representer yamlRepresenter = new Representer();
 
@@ -41,8 +41,6 @@ public class YamlConfigMapper extends ConfigBasic {
 
             if (object != null)
                 convertMapsToSections((Map<?, ?>) object, root);
-
-            update(root);
         } catch (IOException | ClassCastException | YAMLException e) {
             throw new InvalidConfigurationException("Could not load YML", e);
         }
@@ -135,7 +133,6 @@ public class YamlConfigMapper extends ConfigBasic {
 
                 writeLines.append(line);
                 writeLines.append("\n");
-
             }
 
             fileWriter.write(writeLines.toString());
@@ -168,9 +165,5 @@ public class YamlConfigMapper extends ConfigBasic {
 
     public void clearComments() {
         comments.clear();
-    }
-
-    public Map getInnerMap(String path) {
-        return root.getMap(path);
     }
 }
