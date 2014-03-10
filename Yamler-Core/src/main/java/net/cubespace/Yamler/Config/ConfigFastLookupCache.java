@@ -17,6 +17,10 @@ public class ConfigFastLookupCache {
         return (T) lookupTable.get(fullpath);
     }
 
+    public void remove(String fullpath) {
+        lookupTable.remove(fullpath);
+    }
+
     public boolean has(String fullpath) {
         return lookupTable.containsKey(fullpath);
     }

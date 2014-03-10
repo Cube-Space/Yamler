@@ -7,20 +7,17 @@ import java.util.Map;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class ConfigSection {
-    private String key;
     private String fullPath;
     private ConfigFastLookupCache configFastLookupCache;
     protected final Map<Object, Object> map = new LinkedHashMap<>();
 
     public ConfigSection() {
-        this.key = "";
         this.fullPath = "";
 
         configFastLookupCache = new ConfigFastLookupCache();
     }
 
     public ConfigSection(ConfigSection root, String key) {
-        this.key = key;
         this.fullPath = (!root.fullPath.equals("")) ? root.fullPath + "." + key : key;
         this.configFastLookupCache = root.configFastLookupCache;
         configFastLookupCache.set(fullPath, this);
@@ -97,19 +94,15 @@ public class ConfigSection {
              for (Map.Entry<Object, Object> entry : section.map.entrySet()) {
                 if (entry.getValue() instanceof ConfigSection) {
                     Map<Object, Object> result = new LinkedHashMap<>();
+
                     output.put(entry.getKey(), result);
+
                     if (deep) {
                         mapChildrenValues(result, (ConfigSection) entry.getValue(), true);
                     }
                 } else {
-                    output.put(entry.getKey(), entry.getValue());
+                   output.put(entry.getKey(), entry.getValue());
                 }
-            }
-        } else {
-            Map<Object, Object> values = section.getValues(deep);
-
-            for (Map.Entry<Object, Object> entry : values.entrySet()) {
-                output.put(section.fullPath + "." + entry.getKey(), entry.getValue());
             }
         }
     }
@@ -122,6 +115,18 @@ public class ConfigSection {
         Map<Object, Object> result = new LinkedHashMap<>();
         mapChildrenValues(result, this, deep);
         return result;
+    }
+
+    public void remove(String path) {
+        if (path.contains(".")) {
+            ((ConfigSection) configFastLookupCache.get(path.substring(0, path.lastIndexOf(".")))).removeInternal(path.substring(path.lastIndexOf(".") + 1));
+        }
+
+        configFastLookupCache.remove(path);
+    }
+
+    public void removeInternal(String substring) {
+        map.remove(substring);
     }
 
     public void niceOutput() {

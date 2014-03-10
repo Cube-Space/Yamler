@@ -39,7 +39,7 @@ public class YamlConfigMapper extends ConfigBasic {
         try (FileReader fileReader = new FileReader(CONFIG_FILE)) {
             Object object = yaml.load(fileReader);
 
-            if(object != null)
+            if (object != null)
                 convertMapsToSections((Map<?, ?>) object, root);
 
             update(root);
@@ -49,7 +49,7 @@ public class YamlConfigMapper extends ConfigBasic {
     }
 
     private void convertMapsToSections(Map<?, ?> input, ConfigSection section) {
-        if(input == null) return;
+        if (input == null) return;
 
         for (Map.Entry<?, ?> entry : input.entrySet()) {
             String key = entry.getKey().toString();
@@ -83,12 +83,12 @@ public class YamlConfigMapper extends ConfigBasic {
                     depth = depth + 2;
                 } else {
                     if (line.startsWith(new String(new char[depth - 2]).replace("\0", " "))) {
-                        keyChain.remove(keyChain.size()-1);
+                        keyChain.remove(keyChain.size() - 1);
                     } else {
                         //Check how much spaces are infront of the line
                         int spaces = 0;
-                        for(int i = 0; i < line.length(); i++) {
-                            if(line.charAt(i) == ' ') {
+                        for (int i = 0; i < line.length(); i++) {
+                            if (line.charAt(i) == ' ') {
                                 spaces++;
                             } else {
                                 break;
@@ -97,15 +97,13 @@ public class YamlConfigMapper extends ConfigBasic {
 
                         depth = spaces;
 
-                        if(spaces == 0) {
+                        if (spaces == 0) {
                             keyChain = new ArrayList<>();
                             depth = 2;
-                        }
-
-                        else {
+                        } else {
                             ArrayList<String> temp = new ArrayList<>();
                             int index = 0;
-                            for(int i = 0; i < spaces; i = i+2, index++) {
+                            for (int i = 0; i < spaces; i = i + 2, index++) {
                                 temp.add(keyChain.get(index));
                             }
 
@@ -125,6 +123,7 @@ public class YamlConfigMapper extends ConfigBasic {
                     search = "";
                 }
 
+
                 if (comments.containsKey(search)) {
                     for (String comment : comments.get(search)) {
                         writeLines.append(new String(new char[depth - 2]).replace("\0", " "));
@@ -136,6 +135,7 @@ public class YamlConfigMapper extends ConfigBasic {
 
                 writeLines.append(line);
                 writeLines.append("\n");
+
             }
 
             fileWriter.write(writeLines.toString());
