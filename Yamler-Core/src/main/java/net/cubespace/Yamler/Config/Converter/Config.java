@@ -23,6 +23,10 @@ public class Config implements Converter {
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
+        if (section instanceof Config) {
+            return section;
+        }
+
         net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) type.cast(type.newInstance());
         obj.loadFromMap((section instanceof Map) ? (Map) section : ((ConfigSection) section).getRawMap());
         return obj;
