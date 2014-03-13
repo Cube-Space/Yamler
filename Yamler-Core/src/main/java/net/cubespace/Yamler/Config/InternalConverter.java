@@ -21,6 +21,7 @@ public class InternalConverter {
             addConverter(net.cubespace.Yamler.Config.Converter.List.class);
             addConverter(net.cubespace.Yamler.Config.Converter.Map.class);
             addConverter(net.cubespace.Yamler.Config.Converter.Array.class);
+            addConverter(net.cubespace.Yamler.Config.Converter.Set.class);
         } catch (InvalidConverterException e) {
             throw new IllegalStateException(e);
         }

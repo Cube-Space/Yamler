@@ -28,7 +28,7 @@ public interface Converter {
      * @return The correct Object which can be hold by the Field
      * @throws Exception Some generic exception when something went wrong. This gets caught by the Converter
      */
-    public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception;
+    public Object fromConfig(Class<?> type, Object section, ParameterizedType genericType) throws Exception;
 
     /**
      * This checks if this Converter can convert the given Class

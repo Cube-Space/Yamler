@@ -80,7 +80,9 @@ public class Config extends MapConfigMapper implements IConfig {
             try {
                 converter.toConfig(this, field, root, path);
             } catch (Exception e) {
-                throw new InvalidConfigurationException("Could not save the Field", e);
+                if (!skipFailedObjects) {
+                    throw new InvalidConfigurationException("Could not save the Field", e);
+                }
             }
         }
     }
@@ -171,7 +173,9 @@ public class Config extends MapConfigMapper implements IConfig {
                     converter.toConfig(this, field, root, path);
                     save = true;
                 } catch (Exception e) {
-                    throw new InvalidConfigurationException("Could not get field", e);
+                    if (!skipFailedObjects) {
+                        throw new InvalidConfigurationException("Could not get field", e);
+                    }
                 }
             }
         }
