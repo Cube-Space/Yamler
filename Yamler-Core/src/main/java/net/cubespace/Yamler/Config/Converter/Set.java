@@ -18,7 +18,7 @@ public class Set implements Converter {
         java.util.Set<Object> values = (java.util.Set<Object>) obj;
         java.util.List<Object> newList = new ArrayList<>();
 
-        if (genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class<?>)genericType.getActualTypeArguments()[0])) {
+        if (genericType != null && genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class<?>)genericType.getActualTypeArguments()[0])) {
             Converter converter = internalConverter.getConverter(net.cubespace.Yamler.Config.Config.class);
 
             for (Object valObj : values)
@@ -35,7 +35,7 @@ public class Set implements Converter {
         java.util.Set<Object> newList = new HashSet<>();
 
         try {
-            newList = (java.util.Set<Object>)type.newInstance();
+            newList = (java.util.Set<Object>) type.newInstance();
         } catch (Exception e) { }
 
         if (genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class<?>)genericType.getActualTypeArguments()[0])) {

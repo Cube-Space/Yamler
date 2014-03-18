@@ -1,3 +1,5 @@
+package base;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,7 +20,7 @@ public class Util {
                 line = br.readLine();
             }
 
-            return sb.toString();
+            return sb.toString().replace("\r", "");
         }
     }
 }

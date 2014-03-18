@@ -44,9 +44,9 @@ public class Config extends MapConfigMapper implements IConfig {
         }
 
         for (Field field : clazz.getDeclaredFields()) {
-            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
-
             if (doSkip(field)) continue;
+
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
 
             ArrayList<String> comments = new ArrayList<>();
             for (Annotation annotation : field.getAnnotations()) {
@@ -58,14 +58,13 @@ public class Config extends MapConfigMapper implements IConfig {
 
                 if (annotation instanceof Comments) {
                     Comments comment = (Comments) annotation;
-
                     comments.addAll(Arrays.asList(comment.value()));
                 }
+            }
 
-                if (annotation instanceof Path) {
-                    Path path1 = (Path) annotation;
-                    path = path1.value();
-                }
+            if (field.isAnnotationPresent(Path.class)) {
+                Path path1 = field.getAnnotation(Path.class);
+                path = path1.value();
             }
 
             if (comments.size() > 0) {
@@ -74,8 +73,9 @@ public class Config extends MapConfigMapper implements IConfig {
                 }
             }
 
-            if (Modifier.isPrivate(field.getModifiers()))
+            if (Modifier.isPrivate(field.getModifiers())) {
                 field.setAccessible(true);
+            }
 
             try {
                 converter.toConfig(this, field, root, path);
@@ -107,7 +107,7 @@ public class Config extends MapConfigMapper implements IConfig {
                 CONFIG_FILE.createNewFile();
                 save();
             } catch (IOException e) {
-                throw new InvalidConfigurationException("Could not create new empty net.cubespace.Yamler.Config", e);
+                throw new InvalidConfigurationException("Could not create new empty Config", e);
             }
         } else {
             load();
@@ -148,19 +148,18 @@ public class Config extends MapConfigMapper implements IConfig {
 
         boolean save = false;
         for (Field field : clazz.getDeclaredFields()) {
-            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
-
-            for (Annotation annotation : field.getAnnotations()) {
-                if (annotation instanceof Path) {
-                    Path path1 = (Path) annotation;
-                    path = path1.value();
-                }
-            }
-
             if (doSkip(field)) continue;
 
-            if (Modifier.isPrivate(field.getModifiers()))
+            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
+
+            if (field.isAnnotationPresent(Path.class)) {
+                Path path1 = field.getAnnotation(Path.class);
+                path = path1.value();
+            }
+
+            if (Modifier.isPrivate(field.getModifiers())) {
                 field.setAccessible(true);
+            }
 
             if (root.has(path)) {
                 try {

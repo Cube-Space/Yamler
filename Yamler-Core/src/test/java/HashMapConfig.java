@@ -16,5 +16,6 @@ public class HashMapConfig extends Config {
 
     public HashMap<String, Position> TestMap1 = new HashMap<String, Position>(){{
         put("test", new Position());
+        put("test1", new Position());
     }};
 }

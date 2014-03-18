@@ -1,3 +1,4 @@
+import base.Util;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
@@ -5,6 +6,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -38,6 +40,10 @@ public class HashMap {
                 "    test:\n" +
                 "      test1: tesw\n" +
                 "TestMap1:\n" +
+                "  test1:\n" +
+                "    z: 0\n" +
+                "    y: 0\n" +
+                "    x: 0\n" +
                 "  test:\n" +
                 "    z: 0\n" +
                 "    y: 0\n" +
@@ -61,6 +67,10 @@ public class HashMap {
                 "    test:\n" +
                 "      test1: tesw\n" +
                 "TestMap1:\n" +
+                "  test1:\n" +
+                "    z: 0\n" +
+                "    y: 0\n" +
+                "    x: 0\n" +
                 "  test:\n" +
                 "    z: 0\n" +
                 "    y: 0\n" +
@@ -73,5 +83,8 @@ public class HashMap {
         hashMapConfig1.load(file);
 
         Assert.assertEquals(hashMapConfig1.TestHashMap.get("test").size(), 2);
+        Assert.assertTrue(hashMapConfig1.TestMap1 instanceof Map);
+        Assert.assertEquals(hashMapConfig1.TestMap1.size(), 2);
+        Assert.assertTrue(hashMapConfig1.TestMap1.get("test") instanceof Position);
     }
 }

@@ -27,7 +27,7 @@ public class Config implements Converter {
             return section;
         }
 
-        net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) type.cast(type.newInstance());
+        net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) type.newInstance();
         obj.loadFromMap((section instanceof Map) ? (Map) section : ((ConfigSection) section).getRawMap());
         return obj;
     }

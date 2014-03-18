@@ -6,6 +6,7 @@ import net.cubespace.Yamler.Config.Converter.Primitive;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -13,6 +14,7 @@ import java.util.LinkedHashSet;
  */
 public class InternalConverter {
     private LinkedHashSet<Converter> converters = new LinkedHashSet<>();
+    private LinkedHashMap<Class, Converter> foundConverters = new LinkedHashMap<>();
 
     public InternalConverter() {
         try {
@@ -47,12 +49,18 @@ public class InternalConverter {
     }
 
     public Converter getConverter(Class type) {
+        if (foundConverters.containsKey(type)) {
+            return foundConverters.get(type);
+        }
+
         for(Converter converter : converters) {
             if (converter.supports(type)) {
+                foundConverters.put(type, converter);
                 return converter;
             }
         }
 
+        foundConverters.put(type, null);
         return null;
     }
 
