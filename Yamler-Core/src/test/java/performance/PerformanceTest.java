@@ -27,7 +27,7 @@ public class PerformanceTest extends BaseTest {
 
         long end = System.currentTimeMillis() - start;
 
-        Assert.assertTrue(end < 600, "" + end);
+        Assert.assertTrue(end < 20000, "" + end);
     }
 
     @Test(priority = 2)
@@ -38,6 +38,6 @@ public class PerformanceTest extends BaseTest {
 
         long end = System.currentTimeMillis() - start;
 
-        Assert.assertTrue(end < 600, "" + end);
+        Assert.assertTrue(end < 20000, "" + end);
     }
 }
