@@ -39,7 +39,7 @@ public class MapConfigMapper extends YamlConfigMapper {
         return (Map) mapConverter.toConfig(HashMap.class, returnMap, null);
     }
 
-    public void loadFromMap(Map section) throws NoSuchFieldException, IllegalAccessException {
+    public void loadFromMap(Map section) throws Exception {
         for (Field field : getClass().getDeclaredFields()) {
             if (doSkip(field)) continue;
 
@@ -50,10 +50,11 @@ public class MapConfigMapper extends YamlConfigMapper {
                 path = path1.value();
             }
 
-            if(Modifier.isPrivate(field.getModifiers()))
+            if(Modifier.isPrivate(field.getModifiers())) {
                 field.setAccessible(true);
+            }
 
-            field.set(this, section.get(path));
+            converter.fromConfig((Config) this, field, ConfigSection.convertFromMap(section), path);
         }
     }
 }

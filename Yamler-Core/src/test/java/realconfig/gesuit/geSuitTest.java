@@ -44,6 +44,24 @@ public class geSuitTest extends BaseTest {
             ((Announcements) config).Announcements.put("global", announcementEntry);
         }
 
+        if (!((Announcements) config).Announcements.containsKey("test")) {
+            AnnouncementEntry announcementEntry = new AnnouncementEntry();
+            announcementEntry.Interval = 300;
+            announcementEntry.Messages.add("&4Welcome to the server!");
+            announcementEntry.Messages.add("&aDon't forget to check out our website");
+
+            ((Announcements) config).Announcements.put("test", announcementEntry);
+        }
+
+        if (!((Announcements) config).Announcements.containsKey("test1")) {
+            AnnouncementEntry announcementEntry = new AnnouncementEntry();
+            announcementEntry.Interval = 300;
+            announcementEntry.Messages.add("&4Welcome to the server!");
+            announcementEntry.Messages.add("&aDon't forget to check out our website");
+
+            ((Announcements) config).Announcements.put("test1", announcementEntry);
+        }
+
         config.save();
     }
 
@@ -53,22 +71,33 @@ public class geSuitTest extends BaseTest {
 
         Assert.assertEquals(fileContents,
                 "Enabled: true\n" +
-                "Announcements:\n" +
-                "  global:\n" +
-                "    Messages:\n" +
-                "    - '&4Welcome to the server!'\n" +
-                "    - '&aDon''t forget to check out our website'\n" +
-                "    Interval: 300\n");
+                        "Announcements:\n" +
+                        "  test1:\n" +
+                        "    Messages:\n" +
+                        "    - '&4Welcome to the server!'\n" +
+                        "    - '&aDon''t forget to check out our website'\n" +
+                        "    Interval: 300\n" +
+                        "  test:\n" +
+                        "    Messages:\n" +
+                        "    - '&4Welcome to the server!'\n" +
+                        "    - '&aDon''t forget to check out our website'\n" +
+                        "    Interval: 300\n" +
+                        "  global:\n" +
+                        "    Messages:\n" +
+                        "    - '&4Welcome to the server!'\n" +
+                        "    - '&aDon''t forget to check out our website'\n" +
+                        "    Interval: 300\n");
     }
 
     @Test(priority = 4)
     public void checkConfig() throws Exception {
-        config.reload();
+        Announcements announcements = new Announcements();
+        announcements.init(file);
 
-        Assert.assertTrue(((Announcements) config).Announcements.get("global") != null);
-        Assert.assertTrue(((Announcements) config).Announcements.get("global") instanceof AnnouncementEntry);
-        Assert.assertTrue(((Announcements) config).Announcements.get("global").Messages instanceof List);
-        Assert.assertEquals(((Announcements) config).Announcements.get("global").Messages.size(), 2);
-        Assert.assertEquals(((Announcements) config).Announcements.get("global").Interval, (Integer) 300);
+        Assert.assertTrue(announcements.Announcements.get("global") != null);
+        Assert.assertTrue(announcements.Announcements.get("global") instanceof AnnouncementEntry);
+        Assert.assertTrue(announcements.Announcements.get("global").Messages instanceof List);
+        Assert.assertEquals(announcements.Announcements.get("global").Messages.size(), 2);
+        Assert.assertEquals(announcements.Announcements.get("global").Interval, (Integer) 300);
     }
 }

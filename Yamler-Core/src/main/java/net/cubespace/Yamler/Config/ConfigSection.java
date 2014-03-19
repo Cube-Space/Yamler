@@ -168,4 +168,11 @@ public class ConfigSection {
     public Map getRawMap() {
         return map;
     }
+
+    public static ConfigSection convertFromMap(Map config) {
+        ConfigSection configSection = new ConfigSection();
+        configSection.map.putAll(config);
+
+        return configSection;
+    }
 }
