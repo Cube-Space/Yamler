@@ -16,7 +16,7 @@ public class Config extends MapConfigMapper implements IConfig {
 
     }
 
-    public Config(String filename, String... header) {
+    public Config(String filename, String ... header) {
         CONFIG_FILE = new File(filename + (filename.endsWith(".yml") ? "" : ".yml"));
         CONFIG_HEADER = header;
     }

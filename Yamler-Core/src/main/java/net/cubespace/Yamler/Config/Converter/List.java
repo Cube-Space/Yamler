@@ -20,19 +20,13 @@ public class List implements Converter {
         java.util.List values = (java.util.List) obj;
         java.util.List newList = new ArrayList();
 
-        try {
-            newList = ((java.util.List) type.newInstance());
-        } catch (Exception e) {}
+        for (Object val : values) {
+            Converter converter = internalConverter.getConverter(val.getClass());
 
-
-        if(genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class) genericType.getActualTypeArguments()[0])) {
-            Converter converter = internalConverter.getConverter(net.cubespace.Yamler.Config.Config.class);
-
-            for(int i = 0; i < values.size(); i++) {
-                newList.add(converter.toConfig((Class) genericType.getActualTypeArguments()[0], values.get(i), null));
-            }
-        } else {
-            newList = values;
+            if (converter != null)
+                newList.add(converter.toConfig(val.getClass(), val, null));
+            else
+                newList.add(val);
         }
 
         return newList;
@@ -43,14 +37,15 @@ public class List implements Converter {
         java.util.List newList = new ArrayList();
         try {
             newList = ((java.util.List) type.newInstance());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         java.util.List values = (java.util.List) section;
 
-        if(genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class) genericType.getActualTypeArguments()[0])) {
+        if (genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class) genericType.getActualTypeArguments()[0])) {
             Converter converter = internalConverter.getConverter(net.cubespace.Yamler.Config.Config.class);
 
-            for(int i = 0; i < values.size(); i++) {
+            for (int i = 0; i < values.size(); i++) {
                 newList.add(converter.fromConfig((Class) genericType.getActualTypeArguments()[0], values.get(i), null));
             }
         } else {
