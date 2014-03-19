@@ -93,6 +93,7 @@ public class geSuitTest extends BaseTest {
     public void checkConfig() throws Exception {
         Announcements announcements = new Announcements();
         announcements.init(file);
+        announcements.save();
 
         Assert.assertTrue(announcements.Announcements.get("global") != null);
         Assert.assertTrue(announcements.Announcements.get("global") instanceof AnnouncementEntry);

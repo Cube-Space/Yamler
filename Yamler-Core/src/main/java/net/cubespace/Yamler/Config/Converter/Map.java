@@ -50,15 +50,15 @@ public class Map implements Converter {
                 for (java.util.Map.Entry<?, ?> entry : map1.entrySet()) {
                     Object key;
 
-                    if (keyClass.equals(Integer.class)) {
+                    if (keyClass.equals(Integer.class) && !(entry.getKey() instanceof Integer)) {
                         key = Integer.valueOf((String) entry.getKey());
-                    } else if (keyClass.equals(Short.class)) {
+                    } else if (keyClass.equals(Short.class) && !(entry.getKey() instanceof Short)) {
                         key = Short.valueOf((String) entry.getKey());
-                    } else if (keyClass.equals(Byte.class)) {
+                    } else if (keyClass.equals(Byte.class) && !(entry.getKey() instanceof Byte)) {
                         key = Byte.valueOf((String) entry.getKey());
-                    } else if (keyClass.equals(Float.class)) {
+                    } else if (keyClass.equals(Float.class) && !(entry.getKey() instanceof Float)) {
                         key = Float.valueOf((String) entry.getKey());
-                    } else if (keyClass.equals(Double.class)) {
+                    } else if (keyClass.equals(Double.class) && !(entry.getKey() instanceof Double)) {
                         key = Double.valueOf((String) entry.getKey());
                     } else {
                         key = entry.getKey();

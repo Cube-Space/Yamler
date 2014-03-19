@@ -34,8 +34,8 @@ public class Config extends MapConfigMapper implements IConfig {
         clearComments();
 
         internalSave(getClass());
-
         saveToYaml();
+        internalLoad(getClass());
     }
 
     private void internalSave(Class clazz) throws InvalidConfigurationException {
