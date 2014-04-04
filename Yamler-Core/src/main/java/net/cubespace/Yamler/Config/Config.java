@@ -23,6 +23,10 @@ public class Config extends MapConfigMapper implements IConfig {
 
     @Override
     public void save() throws InvalidConfigurationException {
+        save(true);
+    }
+
+    private void save(boolean loadAfterSave) throws InvalidConfigurationException {
         if (CONFIG_FILE == null) {
             throw new IllegalArgumentException("Saving a config without given File");
         }
@@ -35,7 +39,9 @@ public class Config extends MapConfigMapper implements IConfig {
 
         internalSave(getClass());
         saveToYaml();
-        internalLoad(getClass());
+
+        if (loadAfterSave)
+            internalLoad(getClass());
     }
 
     private void internalSave(Class clazz) throws InvalidConfigurationException {
@@ -180,7 +186,7 @@ public class Config extends MapConfigMapper implements IConfig {
         }
 
         if (save) {
-            save();
+            save(false);
         }
     }
 
