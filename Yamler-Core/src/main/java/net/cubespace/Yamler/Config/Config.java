@@ -12,8 +12,6 @@ import java.util.Arrays;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class Config extends MapConfigMapper implements IConfig {
-    private boolean save = false;
-
     public Config() {
 
     }
@@ -37,7 +35,6 @@ public class Config extends MapConfigMapper implements IConfig {
 
         internalSave(getClass());
         saveToYaml();
-        internalLoad(getClass());
     }
 
     private void internalSave(Class clazz) throws InvalidConfigurationException {
@@ -81,6 +78,7 @@ public class Config extends MapConfigMapper implements IConfig {
 
             try {
                 converter.toConfig(this, field, root, path);
+                converter.fromConfig(this, field, root, path);
             } catch (Exception e) {
                 if (!skipFailedObjects) {
                     throw new InvalidConfigurationException("Could not save the Field", e);
@@ -130,11 +128,6 @@ public class Config extends MapConfigMapper implements IConfig {
     public void reload() throws InvalidConfigurationException {
         loadFromYaml();
         internalLoad(getClass());
-
-        if (save) {
-            save();
-            save = false;
-        }
     }
 
     @Override
@@ -146,11 +139,6 @@ public class Config extends MapConfigMapper implements IConfig {
         loadFromYaml();
         update(root);
         internalLoad(getClass());
-
-        if (save) {
-            save();
-            save = false;
-        }
     }
 
     private void internalLoad(Class clazz) throws InvalidConfigurationException {
@@ -181,7 +169,7 @@ public class Config extends MapConfigMapper implements IConfig {
             } else {
                 try {
                     converter.toConfig(this, field, root, path);
-                    save = true;
+                    converter.fromConfig(this, field, root, path);
                 } catch (Exception e) {
                     if (!skipFailedObjects) {
                         throw new InvalidConfigurationException("Could not get field", e);

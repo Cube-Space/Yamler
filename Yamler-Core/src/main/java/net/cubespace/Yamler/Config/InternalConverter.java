@@ -112,12 +112,6 @@ public class InternalConverter {
                     return;
                 }
             }
-        } else {
-            converter = getConverter(field.getType());
-            if (converter != null) {
-                root.set(path, converter.toConfig(field.getType(), obj, (field.getGenericType() instanceof ParameterizedType) ? (ParameterizedType) field.getGenericType() : null));
-                return;
-            }
         }
 
         root.set(path, obj);
