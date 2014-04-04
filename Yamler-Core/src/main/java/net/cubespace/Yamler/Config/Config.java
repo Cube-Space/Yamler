@@ -12,6 +12,8 @@ import java.util.Arrays;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class Config extends MapConfigMapper implements IConfig {
+    private boolean save = false;
+
     public Config() {
 
     }
@@ -23,10 +25,6 @@ public class Config extends MapConfigMapper implements IConfig {
 
     @Override
     public void save() throws InvalidConfigurationException {
-        save(true);
-    }
-
-    private void save(boolean loadAfterSave) throws InvalidConfigurationException {
         if (CONFIG_FILE == null) {
             throw new IllegalArgumentException("Saving a config without given File");
         }
@@ -39,9 +37,7 @@ public class Config extends MapConfigMapper implements IConfig {
 
         internalSave(getClass());
         saveToYaml();
-
-        if (loadAfterSave)
-            internalLoad(getClass());
+        internalLoad(getClass());
     }
 
     private void internalSave(Class clazz) throws InvalidConfigurationException {
@@ -134,6 +130,11 @@ public class Config extends MapConfigMapper implements IConfig {
     public void reload() throws InvalidConfigurationException {
         loadFromYaml();
         internalLoad(getClass());
+
+        if (save) {
+            save();
+            save = false;
+        }
     }
 
     @Override
@@ -145,6 +146,11 @@ public class Config extends MapConfigMapper implements IConfig {
         loadFromYaml();
         update(root);
         internalLoad(getClass());
+
+        if (save) {
+            save();
+            save = false;
+        }
     }
 
     private void internalLoad(Class clazz) throws InvalidConfigurationException {
@@ -152,7 +158,6 @@ public class Config extends MapConfigMapper implements IConfig {
             internalLoad(clazz.getSuperclass());
         }
 
-        boolean save = false;
         for (Field field : clazz.getDeclaredFields()) {
             if (doSkip(field)) continue;
 
@@ -183,10 +188,6 @@ public class Config extends MapConfigMapper implements IConfig {
                     }
                 }
             }
-        }
-
-        if (save) {
-            save(false);
         }
     }
 
