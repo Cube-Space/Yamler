@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
  */
 public class InternalConverter {
     private LinkedHashSet<Converter> converters = new LinkedHashSet<>();
-    private LinkedHashMap<Class, Converter> foundConverters = new LinkedHashMap<>();
 
     public InternalConverter() {
         try {
@@ -49,18 +48,12 @@ public class InternalConverter {
     }
 
     public Converter getConverter(Class type) {
-        if (foundConverters.containsKey(type)) {
-            return foundConverters.get(type);
-        }
-
         for(Converter converter : converters) {
             if (converter.supports(type)) {
-                foundConverters.put(type, converter);
                 return converter;
             }
         }
 
-        foundConverters.put(type, null);
         return null;
     }
 

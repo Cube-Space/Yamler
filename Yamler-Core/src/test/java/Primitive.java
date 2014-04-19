@@ -2,6 +2,7 @@ import base.Util;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;

@@ -42,11 +42,15 @@ public class List implements Converter {
 
         java.util.List values = (java.util.List) section;
 
-        if (genericType.getActualTypeArguments()[0] instanceof Class && net.cubespace.Yamler.Config.Config.class.isAssignableFrom((Class) genericType.getActualTypeArguments()[0])) {
-            Converter converter = internalConverter.getConverter(net.cubespace.Yamler.Config.Config.class);
+        if (genericType.getActualTypeArguments()[0] instanceof Class) {
+            Converter converter = internalConverter.getConverter((Class) genericType.getActualTypeArguments()[0]);
 
-            for (int i = 0; i < values.size(); i++) {
-                newList.add(converter.fromConfig((Class) genericType.getActualTypeArguments()[0], values.get(i), null));
+            if (converter != null) {
+                for ( int i = 0; i < values.size(); i++ ) {
+                    newList.add( converter.fromConfig( ( Class ) genericType.getActualTypeArguments()[0], values.get( i ), null ) );
+                }
+            } else {
+                newList = values;
             }
         } else {
             newList = values;

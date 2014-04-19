@@ -38,8 +38,6 @@ public class UpdateConfig extends BaseTest {
 
     @Test(priority = 2)
     public void save() throws Exception {
-        config.save(file);
-
         String fileContents = Util.readFile(file);
 
         Assert.assertEquals(fileContents.replace("\r", ""), "IsEnabled: true\n" +

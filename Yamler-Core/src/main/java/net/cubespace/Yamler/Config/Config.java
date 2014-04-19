@@ -146,6 +146,7 @@ public class Config extends MapConfigMapper implements IConfig {
             internalLoad(clazz.getSuperclass());
         }
 
+        boolean save = false;
         for (Field field : clazz.getDeclaredFields()) {
             if (doSkip(field)) continue;
 
@@ -170,12 +171,18 @@ public class Config extends MapConfigMapper implements IConfig {
                 try {
                     converter.toConfig(this, field, root, path);
                     converter.fromConfig(this, field, root, path);
+
+                    save = true;
                 } catch (Exception e) {
                     if (!skipFailedObjects) {
                         throw new InvalidConfigurationException("Could not get field", e);
                     }
                 }
             }
+        }
+
+        if (save) {
+            saveToYaml();
         }
     }
 
