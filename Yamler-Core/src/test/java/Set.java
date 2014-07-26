@@ -39,15 +39,15 @@ public class Set {
     }
 
     @org.testng.annotations.Test(priority = 2)
-    public void changeBoolean() throws InvalidConfigurationException, IOException {
+    public void addToSet() throws InvalidConfigurationException, IOException {
         setConfig.StringSet.add("Test1");
         setConfig.save();
 
         String fileContents = Util.readFile(file);
 
         Assert.assertEquals(fileContents.replace("\r", ""), "StringSet:\n" +
-                "- Test\n" +
-                "- Test1\n");
+                "- Test1\n" +
+                "- Test\n");
     }
 
     @org.testng.annotations.Test(priority = 3)

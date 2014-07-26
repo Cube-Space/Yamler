@@ -100,35 +100,35 @@ public class Real {
                 "  hubServer: hub\n" +
                 "  # Position of the lobby\n" +
                 "  lobbyPosition:\n" +
-                "    z: 0\n" +
-                "    y: 50\n" +
                 "    x: 0\n" +
+                "    y: 50\n" +
+                "    z: 0\n" +
                 "  # Position of each spawns\n" +
                 "  spawnPosition:\n" +
-                "  - z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n");
+                "    z: 0\n");
 
     }
 
@@ -189,34 +189,34 @@ public class Real {
                 "  hubServer: hub\n" +
                 "  # Position of the lobby\n" +
                 "  lobbyPosition:\n" +
-                "    z: 0\n" +
-                "    y: 50\n" +
                 "    x: 0\n" +
+                "    y: 50\n" +
+                "    z: 0\n" +
                 "  # Position of each spawns\n" +
                 "  spawnPosition:\n" +
-                "  - z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n" +
-                "  - z: 0\n" +
+                "    z: 0\n" +
+                "  - x: 0\n" +
                 "    y: 50\n" +
-                "    x: 0\n");
+                "    z: 0\n");
     }
 }

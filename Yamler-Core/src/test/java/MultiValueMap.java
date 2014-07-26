@@ -41,12 +41,12 @@ public class MultiValueMap {
                 "  - WRITTEN_BOOK\n" +
                 "servers:\n" +
                 "  default:\n" +
-                "    servers:\n" +
-                "    - server_one\n" +
-                "    - server_two\n" +
                 "    item:\n" +
                 "      name: '&6Server Name'\n" +
                 "      type: ENCHANTED_BOOK\n" +
+                "    servers:\n" +
+                "    - server_one\n" +
+                "    - server_two\n" +
                 "intMap:\n" +
                 "  1: []\n");
     }
@@ -67,12 +67,12 @@ public class MultiValueMap {
                 "  - Test\n" +
                 "servers:\n" +
                 "  default:\n" +
-                "    servers:\n" +
-                "    - server_one\n" +
-                "    - server_two\n" +
                 "    item:\n" +
                 "      name: '&6Server Name'\n" +
                 "      type: ENCHANTED_BOOK\n" +
+                "    servers:\n" +
+                "    - server_one\n" +
+                "    - server_two\n" +
                 "intMap:\n" +
                 "  1: []\n");
     }

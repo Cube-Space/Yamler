@@ -27,13 +27,13 @@ public class ServermenuTest extends BaseTest {
 
         Assert.assertEquals(fileContents, "menus:\n" +
                 "  Game Servers:\n" +
-                "    title: Game Servers\n" +
                 "    servers:\n" +
-                "    - port: 26602\n" +
-                "      displayMotd: false\n" +
-                "      displayPlayers: true\n" +
-                "      hostName: guerra.year4000.net\n" +
+                "    - displayPlayers: true\n" +
                 "      server: TDM1\n" +
-                "      timeout: null\n");
+                "      hostName: guerra.year4000.net\n" +
+                "      port: 26602\n" +
+                "      timeout: null\n" +
+                "      displayMotd: false\n" +
+                "    title: Game Servers\n");
     }
 }

@@ -2,7 +2,6 @@ package net.cubespace.Yamler.Config.Converter;
 
 import net.cubespace.Yamler.Config.ConfigSection;
 import net.cubespace.Yamler.Config.InternalConverter;
-import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
@@ -24,9 +23,20 @@ public class Config implements Converter {
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
-        net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) type.newInstance();
+        net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) newInstance(type);
         obj.loadFromMap((section instanceof Map) ? (Map) section : ((ConfigSection) section).getRawMap());
         return obj;
+    }
+    
+    // recursively handles enclosed classes
+    public Object newInstance(Class type) throws Exception {
+        Class enclosingClass = type.getEnclosingClass();
+        if (enclosingClass != null) {
+            Object instanceOfEnclosingClass = newInstance(enclosingClass);
+            return type.getConstructor(enclosingClass).newInstance(instanceOfEnclosingClass);
+        } else {
+            return type.newInstance();
+        }
     }
 
     @Override
