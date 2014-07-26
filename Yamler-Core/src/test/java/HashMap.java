@@ -40,18 +40,18 @@ public class HashMap {
                 "    test:\n" +
                 "      test1: tesw\n" +
                 "TestMap1:\n" +
-                "  test1:\n" +
-                "    z: 0\n" +
-                "    y: 0\n" +
-                "    x: 0\n" +
                 "  test:\n" +
-                "    z: 0\n" +
+                "    x: 0\n" +
                 "    y: 0\n" +
-                "    x: 0\n");
+                "    z: 0\n" +
+                "  test1:\n" +
+                "    x: 0\n" +
+                "    y: 0\n" +
+                "    z: 0\n");
     }
 
     @Test(priority = 2)
-    public void changeBoolean() throws InvalidConfigurationException, IOException {
+    public void addToHashMap() throws InvalidConfigurationException, IOException {
         hashMapConfig.TestHashMap.get("test").put("test1", new java.util.HashMap<String, String>() {{
             put("tre", "tew");
         }});
@@ -62,19 +62,19 @@ public class HashMap {
 
         Assert.assertEquals(fileContents.replace("\r", ""), "TestHashMap:\n" +
                 "  test:\n" +
-                "    test1:\n" +
-                "      tre: tew\n" +
                 "    test:\n" +
                 "      test1: tesw\n" +
+                "    test1:\n" +
+                "      tre: tew\n" +
                 "TestMap1:\n" +
-                "  test1:\n" +
-                "    z: 0\n" +
-                "    y: 0\n" +
-                "    x: 0\n" +
                 "  test:\n" +
-                "    z: 0\n" +
+                "    x: 0\n" +
                 "    y: 0\n" +
-                "    x: 0\n");
+                "    z: 0\n" +
+                "  test1:\n" +
+                "    x: 0\n" +
+                "    y: 0\n" +
+                "    z: 0\n");
     }
 
     @Test(priority = 2)

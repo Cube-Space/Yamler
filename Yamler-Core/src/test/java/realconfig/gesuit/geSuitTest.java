@@ -69,24 +69,23 @@ public class geSuitTest extends BaseTest {
     public void checkYMLContents() throws Exception {
         String fileContents = Util.readFile(file);
 
-        Assert.assertEquals(fileContents,
-                "Enabled: true\n" +
-                        "Announcements:\n" +
-                        "  test1:\n" +
-                        "    Messages:\n" +
-                        "    - '&4Welcome to the server!'\n" +
-                        "    - '&aDon''t forget to check out our website'\n" +
-                        "    Interval: 300\n" +
-                        "  test:\n" +
-                        "    Messages:\n" +
-                        "    - '&4Welcome to the server!'\n" +
-                        "    - '&aDon''t forget to check out our website'\n" +
-                        "    Interval: 300\n" +
-                        "  global:\n" +
-                        "    Messages:\n" +
-                        "    - '&4Welcome to the server!'\n" +
-                        "    - '&aDon''t forget to check out our website'\n" +
-                        "    Interval: 300\n");
+        Assert.assertEquals(fileContents, "Enabled: true\n" +
+                "Announcements:\n" +
+                "  test:\n" +
+                "    Messages:\n" +
+                "    - '&4Welcome to the server!'\n" +
+                "    - '&aDon''t forget to check out our website'\n" +
+                "    Interval: 300\n" +
+                "  global:\n" +
+                "    Messages:\n" +
+                "    - '&4Welcome to the server!'\n" +
+                "    - '&aDon''t forget to check out our website'\n" +
+                "    Interval: 300\n" +
+                "  test1:\n" +
+                "    Messages:\n" +
+                "    - '&4Welcome to the server!'\n" +
+                "    - '&aDon''t forget to check out our website'\n" +
+                "    Interval: 300\n");
     }
 
     @Test(priority = 4)
