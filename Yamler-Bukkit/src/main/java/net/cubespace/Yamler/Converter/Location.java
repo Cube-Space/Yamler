@@ -23,6 +23,8 @@ public class Location implements Converter {
         saveMap.put("x", location.getX());
         saveMap.put("y", location.getY());
         saveMap.put("z", location.getZ());
+        saveMap.put("yaw", location.getYaw());
+        saveMap.put("pitch", location.getPitch());
 
         return saveMap;
     }
@@ -36,7 +38,7 @@ public class Location implements Converter {
             locationMap = (Map<String, Object>) ( (ConfigSection) section ).getRawMap();
         }
 
-        return new org.bukkit.Location(Bukkit.getWorld((String) locationMap.get("world")), (Double) locationMap.get("x"), (Double) locationMap.get("y"), (Double) locationMap.get("z"));
+        return new org.bukkit.Location(Bukkit.getWorld((String) locationMap.get("world")), (Double) locationMap.get("x"), (Double) locationMap.get("y"), (Double) locationMap.get("z"), (Float) locationMap.get("yaw"), (Float) locationMap.get("pitch") );
     }
 
     @Override
