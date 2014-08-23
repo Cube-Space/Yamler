@@ -29,7 +29,13 @@ public class Location implements Converter {
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
-        Map<String, Object> locationMap = (Map<String, Object>) ((ConfigSection) section).getRawMap();
+        Map<String, Object> locationMap;
+        if ( section instanceof Map ) {
+            locationMap = (Map<String, Object>) section;
+        } else {
+            locationMap = (Map<String, Object>) ( (ConfigSection) section ).getRawMap();
+        }
+
         return new org.bukkit.Location(Bukkit.getWorld((String) locationMap.get("world")), (Double) locationMap.get("x"), (Double) locationMap.get("y"), (Double) locationMap.get("z"));
     }
 
