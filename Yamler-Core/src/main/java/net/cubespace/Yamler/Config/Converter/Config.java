@@ -18,13 +18,13 @@ public class Config implements Converter {
 
     @Override
     public Object toConfig(Class<?> type, Object obj, ParameterizedType parameterizedType) throws Exception {
-        return (obj instanceof Map) ? obj : ((net.cubespace.Yamler.Config.Config) obj).saveToMap();
+        return (obj instanceof Map) ? obj : ((net.cubespace.Yamler.Config.Config) obj).saveToMap( obj.getClass() );
     }
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
         net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) newInstance(type);
-        obj.loadFromMap((section instanceof Map) ? (Map) section : ((ConfigSection) section).getRawMap());
+        obj.loadFromMap((section instanceof Map) ? (Map) section : ((ConfigSection) section).getRawMap(), type);
         return obj;
     }
     

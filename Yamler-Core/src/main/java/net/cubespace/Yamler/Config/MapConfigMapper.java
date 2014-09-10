@@ -4,8 +4,6 @@ import net.cubespace.Yamler.Config.Converter.Converter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,10 +11,17 @@ import java.util.Map;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class MapConfigMapper extends YamlConfigMapper {
-    public Map saveToMap() throws Exception {
+    public Map<String, Object> saveToMap(Class clazz) throws Exception {
         Map<String, Object> returnMap = new HashMap<>();
 
-        for (Field field : getClass().getDeclaredFields()) {
+        if (!clazz.getSuperclass().equals(Config.class) && !clazz.getSuperclass().equals(Object.class)) {
+            Map<String, Object> map = saveToMap(clazz.getSuperclass());
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                returnMap.put( entry.getKey(), entry.getValue() );
+            }
+        }
+
+        for (Field field : clazz.getDeclaredFields()) {
             if (doSkip(field)) continue;
 
             String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
@@ -36,11 +41,15 @@ public class MapConfigMapper extends YamlConfigMapper {
         }
 
         Converter mapConverter = converter.getConverter(Map.class);
-        return (Map) mapConverter.toConfig(HashMap.class, returnMap, null);
+        return (Map<String, Object>) mapConverter.toConfig(HashMap.class, returnMap, null);
     }
 
-    public void loadFromMap(Map section) throws Exception {
-        for (Field field : getClass().getDeclaredFields()) {
+    public void loadFromMap(Map section, Class clazz) throws Exception {
+        if (!clazz.getSuperclass().equals(Config.class) && !clazz.getSuperclass().equals(Config.class)) {
+            loadFromMap(section, clazz.getSuperclass());
+        }
+
+        for (Field field : clazz.getDeclaredFields()) {
             if (doSkip(field)) continue;
 
             String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
