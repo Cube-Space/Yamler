@@ -42,12 +42,13 @@ public class CustomConfigClassesTest {
                 "  # To configure the default Spawn Location please use '/plugin setspawn' ingame.\n" +
                 "  # If you modify it here it can not work.\n" +
                 "  Location:\n" +
+                "    yaw: null\n" +
                 "    server: null\n" +
-                "    world: null\n" +
-                "    x: null\n" +
-                "    y: null\n" +
+                "    pitch: null\n"  +
                 "    z: null\n" +
-                "    pitch: null\n" +
-                "    yaw: null\n" );
+                "    y: null\n" +
+                "    world: null\n" +
+                "    x: null\n"
+        );
     }
 }
