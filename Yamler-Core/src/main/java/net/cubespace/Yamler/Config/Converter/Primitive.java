@@ -39,6 +39,10 @@ public class Primitive implements Converter {
             case "byte":
                 return (section instanceof Byte) ? section : new Integer((int) section).byteValue();
             case "float":
+                if ( section instanceof Integer ) {
+                    return new Double( (int) section ).floatValue();
+                }
+
                 return (section instanceof Float) ? section : new Double((double) section).floatValue();
             case "char":
                 return (section instanceof Character) ? section : ((String) section).charAt(0);
