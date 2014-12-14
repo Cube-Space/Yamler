@@ -43,13 +43,18 @@ public class Set implements Converter {
             newList = (java.util.Set<Object>) type.newInstance();
         } catch (Exception e) { }
 
-        for (Object val : values) {
-            Converter converter = internalConverter.getConverter(val.getClass());
+        if (genericType != null && genericType.getActualTypeArguments()[0] instanceof Class) {
+            Converter converter = internalConverter.getConverter((Class) genericType.getActualTypeArguments()[0]);
 
-            if (converter != null)
-                newList.add(converter.toConfig(val.getClass(), val, null));
-            else
-                newList.add(val);
+            if (converter != null) {
+                for ( int i = 0; i < values.size(); i++ ) {
+                    newList.add( converter.fromConfig( ( Class ) genericType.getActualTypeArguments()[0], values.get( i ), null ) );
+                }
+            } else {
+                newList.addAll( values );
+            }
+        } else {
+            newList.addAll( values );
         }
 
         return newList;

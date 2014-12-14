@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import java.util.Map;
 public class YamlConfigMapper extends ConfigBasic {
     private transient Yaml yaml;
     protected transient ConfigSection root;
-    private transient HashMap<String, ArrayList<String>> comments = new HashMap<>();
+    private transient Map<String, ArrayList<String>> comments = new LinkedHashMap<>();
     private transient Representer yamlRepresenter = new Representer();
 
     protected YamlConfigMapper() {

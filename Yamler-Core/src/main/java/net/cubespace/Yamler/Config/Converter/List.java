@@ -42,7 +42,7 @@ public class List implements Converter {
 
         java.util.List values = (java.util.List) section;
 
-        if (genericType.getActualTypeArguments()[0] instanceof Class) {
+        if (genericType != null && genericType.getActualTypeArguments()[0] instanceof Class) {
             Converter converter = internalConverter.getConverter((Class) genericType.getActualTypeArguments()[0]);
 
             if (converter != null) {
