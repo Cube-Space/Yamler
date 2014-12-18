@@ -6,7 +6,7 @@
 
     <groupId>net.cubespace</groupId>
     <artifactId>Yamler-parent</artifactId>
-    <version>2.2.3-SNAPSHOT</version>
+    <version>2.2.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <distributionManagement>
