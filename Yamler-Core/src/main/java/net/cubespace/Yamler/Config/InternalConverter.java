@@ -6,14 +6,17 @@ import net.cubespace.Yamler.Config.Converter.Primitive;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class InternalConverter {
     private LinkedHashSet<Converter> converters = new LinkedHashSet<>();
+    private List<Class> customConverters = new ArrayList<>();
 
     public InternalConverter() {
         try {
@@ -108,5 +111,14 @@ public class InternalConverter {
         }
 
         root.set(path, obj);
+    }
+
+    public List<Class> getCustomConverters() {
+        return new ArrayList<>(customConverters);
+    }
+
+    public void addCustomConverter(Class addConverter) throws InvalidConverterException {
+        addConverter(addConverter);
+        customConverters.add(addConverter);
     }
 }

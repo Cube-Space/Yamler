@@ -3,7 +3,9 @@ package net.cubespace.Yamler.Config;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -33,7 +35,7 @@ public class ConfigBasic {
      * @throws InvalidConverterException If the Converter has any errors this Exception tells you what
      */
     public void addConverter(Class addConverter) throws InvalidConverterException {
-        converter.addConverter(addConverter);
+        converter.addCustomConverter(addConverter);
     }
 
     protected boolean doSkip(Field field) {
