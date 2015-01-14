@@ -21,6 +21,10 @@ public class Array implements Converter {
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
+        if ( type.isAssignableFrom( section.getClass() ) ) {
+            return section;
+        }
+
         java.util.List values = (java.util.List) section;
         return getArray(type, values);
     }
