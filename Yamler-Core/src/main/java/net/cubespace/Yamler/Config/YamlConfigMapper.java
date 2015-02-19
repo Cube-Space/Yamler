@@ -6,11 +6,13 @@ import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class YamlConfigMapper extends ConfigBasic {
     protected void loadFromYaml() throws InvalidConfigurationException {
         root = new ConfigSection();
 
-        try (FileReader fileReader = new FileReader(CONFIG_FILE)) {
+        try (InputStreamReader fileReader = new InputStreamReader(new FileInputStream(CONFIG_FILE), Charset.forName("UTF-8"))) {
             Object object = yaml.load(fileReader);
 
             if (object != null)
@@ -63,7 +65,7 @@ public class YamlConfigMapper extends ConfigBasic {
     }
 
     protected void saveToYaml() throws InvalidConfigurationException {
-        try (FileWriter fileWriter = new FileWriter(CONFIG_FILE)) {
+        try (OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(CONFIG_FILE), Charset.forName("UTF-8"))) {
             if (CONFIG_HEADER != null) {
                 for (String line : CONFIG_HEADER) {
                     fileWriter.write("# " + line + "\n");
