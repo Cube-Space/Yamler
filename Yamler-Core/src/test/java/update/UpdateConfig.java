@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
@@ -40,7 +41,21 @@ public class UpdateConfig extends BaseTest {
     public void save() throws Exception {
         String fileContents = Util.readFile(file);
 
-        Assert.assertEquals(fileContents.replace("\r", ""), "IsEnabled: true\n" +
-                "Enabled: false\n");
+        Assert.assertEquals( fileContents.replace( "\r", "" ), "IsEnabled: true\n" +
+                "Enabled: false\n" +
+                "restriction:\n" +
+                "  bedwars.restriction.player: 1\n" +
+                "  bedwars.restriction.premium: 3\n" );
+    }
+
+    @Test(priority = 3)
+    public void load() throws Exception {
+        UpdateConfigConfig config1 = new UpdateConfigConfig();
+        config1.load(file);
+
+        Assert.assertEquals( config1.restriction, new HashMap<String, Integer>(){{
+            put( "bedwars.restriction.player", 1 );
+            put( "bedwars.restriction.premium", 3 );
+        }} );
     }
 }

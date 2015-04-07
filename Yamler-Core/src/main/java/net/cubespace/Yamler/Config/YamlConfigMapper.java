@@ -59,7 +59,7 @@ public class YamlConfigMapper extends ConfigBasic {
             if (value instanceof Map) {
                 convertMapsToSections((Map<?, ?>) value, section.create(key));
             } else {
-                section.set(key, value);
+                section.set(key, value, false);
             }
         }
     }

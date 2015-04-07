@@ -53,21 +53,28 @@ public class ConfigSection {
     }
 
     public void set(String path, Object value) {
+        set( path, value, true );
+    }
+
+    public void set(String path, Object value, boolean searchForSubNodes) {
         if (path == null) {
             throw new IllegalArgumentException("Cannot set a value at empty path");
         }
 
         //Be sure to have all ConfigSections down the Path
-        int i1 = -1, i2;
+        int i1 = -1, i2 = 0;
         ConfigSection section = this;
-        while ((i1 = path.indexOf('.', i2 = i1 + 1)) != -1) {
-            String node = path.substring(i2, i1);
-            ConfigSection subSection = section.getConfigSection(node);
 
-            if (subSection == null) {
-                section = section.create(node);
-            } else {
-                section = subSection;
+        if ( searchForSubNodes ) {
+            while ( ( i1 = path.indexOf( '.', i2 = i1 + 1 ) ) != -1 ) {
+                String node = path.substring( i2, i1 );
+                ConfigSection subSection = section.getConfigSection( node );
+
+                if ( subSection == null ) {
+                    section = section.create( node );
+                } else {
+                    section = subSection;
+                }
             }
         }
 
