@@ -3,9 +3,12 @@ package net.cubespace.Yamler.Config.Converter;
 import net.cubespace.Yamler.Config.InternalConverter;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
+ * @author bibo38
  */
 public class Array implements Converter {
     private InternalConverter internalConverter;
@@ -16,22 +19,37 @@ public class Array implements Converter {
 
     @Override
     public Object toConfig(Class<?> type, Object obj, ParameterizedType parameterizedType) throws Exception {
-        return obj;
+        Class<?> singleType = type.getComponentType();
+        Converter conv = internalConverter.getConverter(singleType);
+        if(conv == null)
+            return obj;
+
+        Object[] ret = new Object[java.lang.reflect.Array.getLength(obj)];
+        for(int i = 0; i < ret.length; i++)
+            ret[i] = conv.toConfig(singleType, java.lang.reflect.Array.get(obj, i), parameterizedType);
+        return ret;
     }
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
-        if ( type.isAssignableFrom( section.getClass() ) ) {
-            return section;
+        Class<?> singleType = type.getComponentType();
+        java.util.List values;
+
+        if(section instanceof java.util.List)
+            values = (java.util.List) section;
+        else {
+            values = new ArrayList();
+            Collections.addAll(values, (Object[]) section);
         }
 
-        java.util.List values = (java.util.List) section;
-        return getArray(type, values);
-    }
+        Object ret = java.lang.reflect.Array.newInstance(singleType, values.size());
+        Converter conv = internalConverter.getConverter(singleType);
+        if(conv == null)
+            return values.toArray((Object[]) ret);
 
-    private static <T> T[] getArray(Class<T> type, java.util.List list) {
-        T[] array = (T[]) java.lang.reflect.Array.newInstance(type, list.size());
-        return (T[]) list.toArray(array);
+        for(int i = 0; i < values.size(); i++)
+            java.lang.reflect.Array.set(ret, i, conv.fromConfig(singleType, values.get(i), genericType));
+        return ret;
     }
 
     @Override
