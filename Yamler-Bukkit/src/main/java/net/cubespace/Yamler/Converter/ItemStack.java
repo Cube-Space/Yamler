@@ -30,9 +30,12 @@ public class ItemStack implements Converter {
 
         Converter listConverter = converter.getConverter(List.class);
 
-        Map<String, Object> meta = new HashMap<>();
-        meta.put("name", itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : null);
-        meta.put("lore", itemStack.getItemMeta().hasLore() ? listConverter.toConfig(List.class, itemStack.getItemMeta().getLore(), null) : null);
+        Map<String, Object> meta = null;
+        if(itemStack.hasItemMeta()) {
+            meta = new HashMap<>();
+            meta.put("name", itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : null);
+            meta.put("lore", itemStack.getItemMeta().hasLore() ? listConverter.toConfig(List.class, itemStack.getItemMeta().getLore(), null) : null);
+        }
 
         saveMap.put("meta", meta);
 
@@ -41,24 +44,36 @@ public class ItemStack implements Converter {
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
-        Map<String, Object> itemstackMap = (Map<String, Object>) ((ConfigSection) section).getRawMap();
-        Map<String, Object> metaMap = (Map<String, Object>) ((ConfigSection) itemstackMap.get("meta")).getRawMap();
+        Map itemstackMap;
+        Map metaMap = null;
+
+        if(section instanceof Map) {
+            itemstackMap = (Map) section;
+            metaMap = (Map) itemstackMap.get("meta");
+        } else {
+            itemstackMap = ((ConfigSection) section).getRawMap();
+            if(itemstackMap.get("meta") != null)
+                metaMap = ((ConfigSection) itemstackMap.get("meta")).getRawMap();
+        }
 
         String[] temp = ((String) itemstackMap.get("id")).split(":");
-        org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack(Material.valueOf(temp[0]));
+        org.bukkit.inventory.ItemStack itemStack = (org.bukkit.inventory.ItemStack)
+                type.getConstructor(Material.class).newInstance(Material.valueOf(temp[0]));
         itemStack.setAmount((int) itemstackMap.get("amount"));
 
-        if (temp.length == 2) {
+        if(temp.length == 2) {
             itemStack.setDurability(Short.valueOf(temp[1]));
         }
 
-        if (metaMap.get("name") != null) {
-            itemStack.getItemMeta().setDisplayName((String) metaMap.get("name"));
-        }
+        if(metaMap != null) {
+            if(metaMap.get("name") != null) {
+                itemStack.getItemMeta().setDisplayName((String) metaMap.get("name"));
+            }
 
-        if (metaMap.get("lore") != null) {
-            Converter listConverter = converter.getConverter(List.class);
-            itemStack.getItemMeta().setLore((List<String>) listConverter.fromConfig(List.class, metaMap.get("lore"), null));
+            if(metaMap.get("lore") != null) {
+                Converter listConverter = converter.getConverter(List.class);
+                itemStack.getItemMeta().setLore((List<String>) listConverter.fromConfig(List.class, metaMap.get("lore"), null));
+            }
         }
 
         return itemStack;
