@@ -10,60 +10,83 @@ import java.util.Map;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class MapConfigMapper extends YamlConfigMapper {
-    public Map<String, Object> saveToMap(Class clazz) throws Exception {
-        Map<String, Object> returnMap = new HashMap<>();
+public class MapConfigMapper extends BaseConfigMapper {
+	public Map<String, Object> saveToMap(Class clazz) throws Exception {
+		Map<String, Object> returnMap = new HashMap<>();
 
-        if (!clazz.getSuperclass().equals(Config.class) && !clazz.getSuperclass().equals(Object.class)) {
-            Map<String, Object> map = saveToMap(clazz.getSuperclass());
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                returnMap.put( entry.getKey(), entry.getValue() );
-            }
-        }
+		if (!clazz.getSuperclass().equals(YamlConfig.class) && !clazz.getSuperclass().equals(Object.class)) {
+			Map<String, Object> map = saveToMap(clazz.getSuperclass());
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				returnMap.put(entry.getKey(), entry.getValue());
+			}
+		}
 
-        for (Field field : clazz.getDeclaredFields()) {
-            if (doSkip(field)) continue;
+		for (Field field : clazz.getDeclaredFields()) {
+			if (doSkip(field)) {
+				continue;
+			}
 
-            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
+			String path = "";
 
-            if (field.isAnnotationPresent(Path.class)) {
-                Path path1 = field.getAnnotation(Path.class);
-                path = path1.value();
-            }
+			switch (CONFIG_MODE) {
+				case PATH_BY_UNDERSCORE:
+					path = field.getName().replace("_", ".");
+					break;
+				case FIELD_IS_KEY:
+					path = field.getName();
+					break;
+				case DEFAULT:
+				default:
+					String fieldName = field.getName();
+					if (fieldName.contains("_")) {
+						path = field.getName().replace("_", ".");
+					} else {
+						path = field.getName();
+					}
+					break;
+			}
 
-            if (Modifier.isPrivate(field.getModifiers())) {
-                field.setAccessible(true);
-            }
+			if (field.isAnnotationPresent(Path.class)) {
+				Path path1 = field.getAnnotation(Path.class);
+				path = path1.value();
+			}
 
-            try {
-                returnMap.put(path, field.get(this));
-            } catch (IllegalAccessException e) { }
-        }
+			if (Modifier.isPrivate(field.getModifiers())) {
+				field.setAccessible(true);
+			}
 
-        Converter mapConverter = converter.getConverter(Map.class);
-        return (Map<String, Object>) mapConverter.toConfig(HashMap.class, returnMap, null);
-    }
+			try {
+				returnMap.put(path, field.get(this));
+			} catch (IllegalAccessException e) {
+			}
+		}
 
-    public void loadFromMap(Map section, Class clazz) throws Exception {
-        if (!clazz.getSuperclass().equals(Config.class) && !clazz.getSuperclass().equals(Config.class)) {
-            loadFromMap(section, clazz.getSuperclass());
-        }
+		Converter mapConverter = converter.getConverter(Map.class);
+		return (Map<String, Object>) mapConverter.toConfig(HashMap.class, returnMap, null);
+	}
 
-        for (Field field : clazz.getDeclaredFields()) {
-            if (doSkip(field)) continue;
+	public void loadFromMap(Map section, Class clazz) throws Exception {
+		if (!clazz.getSuperclass().equals(YamlConfig.class) && !clazz.getSuperclass().equals(YamlConfig.class)) {
+			loadFromMap(section, clazz.getSuperclass());
+		}
 
-            String path = (CONFIG_MODE.equals(ConfigMode.DEFAULT)) ? field.getName().replaceAll("_", ".") : field.getName();
+		for (Field field : clazz.getDeclaredFields()) {
+			if (doSkip(field)) {
+				continue;
+			}
 
-            if (field.isAnnotationPresent(Path.class)) {
-                Path path1 = field.getAnnotation(Path.class);
-                path = path1.value();
-            }
+			String path = (CONFIG_MODE.equals(ConfigMode.PATH_BY_UNDERSCORE)) ? field.getName().replaceAll("_", ".") : field.getName();
 
-            if(Modifier.isPrivate(field.getModifiers())) {
-                field.setAccessible(true);
-            }
+			if (field.isAnnotationPresent(Path.class)) {
+				Path path1 = field.getAnnotation(Path.class);
+				path = path1.value();
+			}
 
-            converter.fromConfig((Config) this, field, ConfigSection.convertFromMap(section), path);
-        }
-    }
+			if (Modifier.isPrivate(field.getModifiers())) {
+				field.setAccessible(true);
+			}
+
+			converter.fromConfig((YamlConfig) this, field, ConfigSection.convertFromMap(section), path);
+		}
+	}
 }

@@ -1,11 +1,11 @@
 package performance.config;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class Position extends Config {
+public class Position extends YamlConfig {
     private int x;
     private int y;
     private int z;

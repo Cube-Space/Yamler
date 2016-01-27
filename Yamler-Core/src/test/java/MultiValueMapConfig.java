@@ -1,4 +1,4 @@
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class MultiValueMapConfig extends Config {
+public class MultiValueMapConfig extends YamlConfig {
     private java.util.HashMap<String, java.util.List<String>> items = new java.util.HashMap<String, java.util.List<String>>() {{
         //  Defaults
         java.util.List<String> example = new ArrayList<String>() {{

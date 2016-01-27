@@ -1,11 +1,11 @@
 package realconfig.servermenu.config;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ServermenuConfig extends Config {
+public class ServermenuConfig extends YamlConfig {
     public ServermenuConfig() {
         ArrayList<Servers> servers = new ArrayList<>();
 

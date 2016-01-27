@@ -1,5 +1,5 @@
 import net.cubespace.Yamler.Config.Comment;
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.File;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class Messages extends Config {
+public class Messages extends YamlConfig {
     public static Messages instance = null;
 
     private Messages() {

@@ -1,10 +1,10 @@
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 import net.cubespace.Yamler.Config.ConfigSection;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class PrimitiveConfig extends Config {
+public class PrimitiveConfig extends YamlConfig {
     public boolean TestBoolean = false;
     public int TestInt = 0;
     public short TestShort = 0;

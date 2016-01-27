@@ -1,11 +1,11 @@
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.util.HashMap;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class HashMapConfig extends Config {
+public class HashMapConfig extends YamlConfig {
     public HashMap<String, HashMap<String, HashMap<String, String>>> TestHashMap = new HashMap<String, HashMap<String, HashMap<String, String>>>(){{
         put("test", new HashMap<String, HashMap<String, String>>(){{
             put("test", new HashMap<String, String>(){{

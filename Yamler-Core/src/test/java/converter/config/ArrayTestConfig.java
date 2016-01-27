@@ -1,6 +1,6 @@
 package converter.config;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 /**
  * This test config is based on the Issues #16 and #17
@@ -10,9 +10,9 @@ import net.cubespace.Yamler.Config.Config;
  * @author bibo38
  * @see converter.ArrayConverterTest
  */
-public class ArrayTestConfig extends Config {
+public class ArrayTestConfig extends YamlConfig {
 
-    public class InnerConfig extends Config {
+    public class InnerConfig extends YamlConfig {
         public int x = 7;
     }
 

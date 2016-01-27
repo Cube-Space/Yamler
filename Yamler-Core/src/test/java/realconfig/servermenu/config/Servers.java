@@ -1,8 +1,8 @@
 package realconfig.servermenu.config;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
-public class Servers extends Config {
+public class Servers extends YamlConfig {
     /** Should we display the player count. */
     private boolean displayPlayers;
     /** Should we display the motd. */

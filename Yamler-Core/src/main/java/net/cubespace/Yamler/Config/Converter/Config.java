@@ -2,6 +2,7 @@ package net.cubespace.Yamler.Config.Converter;
 
 import net.cubespace.Yamler.Config.ConfigSection;
 import net.cubespace.Yamler.Config.InternalConverter;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
@@ -18,12 +19,12 @@ public class Config implements Converter {
 
     @Override
     public Object toConfig(Class<?> type, Object obj, ParameterizedType parameterizedType) throws Exception {
-        return (obj instanceof Map) ? obj : ((net.cubespace.Yamler.Config.Config) obj).saveToMap( obj.getClass() );
+        return (obj instanceof Map) ? obj : ((YamlConfig) obj).saveToMap( obj.getClass() );
     }
 
     @Override
     public Object fromConfig(Class type, Object section, ParameterizedType genericType) throws Exception {
-        net.cubespace.Yamler.Config.Config obj = (net.cubespace.Yamler.Config.Config) newInstance(type);
+        YamlConfig obj = (YamlConfig) newInstance(type);
 
         // Inject Converter stack into subconfig
         for (Class aClass : internalConverter.getCustomConverters()) {
@@ -47,6 +48,6 @@ public class Config implements Converter {
 
     @Override
     public boolean supports(Class<?> type) {
-        return net.cubespace.Yamler.Config.Config.class.isAssignableFrom(type);
+        return YamlConfig.class.isAssignableFrom(type);
     }
 }
