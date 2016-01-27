@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class YamlConfig extends MapConfigMapper implements IConfig {
+public class YamlConfig extends ConfigMapper implements IConfig {
 	public YamlConfig() {
 
 	}
