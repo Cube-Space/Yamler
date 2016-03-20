@@ -1,7 +1,6 @@
 package base;
 
-import net.cubespace.Yamler.Config.Config;
-import org.testng.annotations.BeforeSuite;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.io.File;
 
@@ -10,7 +9,7 @@ import java.io.File;
  */
 public abstract class BaseTest {
     protected String filename;
-    protected Config config;
+    protected YamlConfig config;
     protected File file;
 
     public void before() throws Exception {

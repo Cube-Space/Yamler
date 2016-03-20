@@ -1,5 +1,5 @@
 import net.cubespace.Yamler.Config.Comments;
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ import java.io.File;
  * This example will use the Getter/Setter pattern for accessing the values, you can ofc use public modified
  * fields if you want to.
  */
-public class CustomConfigClasses extends Config {
+public class CustomConfigClasses extends YamlConfig {
     /**
      * This class represents a Location (with server, world, x, y, z, yaw and pitch)
      *
@@ -25,7 +25,7 @@ public class CustomConfigClasses extends Config {
      *
      * Hint: Since this is a embedded Config Class it does not need to setup a File
      */
-    public class Location extends Config {
+    public class Location extends YamlConfig {
         private String server;
         private String world;
         private Integer x;

@@ -1,4 +1,4 @@
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 import net.cubespace.Yamler.Config.Path;
 
 /**
@@ -8,7 +8,7 @@ import net.cubespace.Yamler.Config.Path;
  * *
  * This example will use the public Access Pattern. You can use Getter/Setters if you like
  */
-public class PathAnnotation extends Config {
+public class PathAnnotation extends YamlConfig {
     @Path("config-with-dash")
     public Boolean Test = true;
 }

@@ -1,8 +1,8 @@
 package extend;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
-public class ActionConfig extends Config
+public class ActionConfig extends YamlConfig
 {
     public ActionConfig()
     {

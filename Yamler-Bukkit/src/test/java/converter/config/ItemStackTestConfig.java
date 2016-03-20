@@ -1,7 +1,7 @@
 package converter.config;
 
 import helper.TestItemStack;
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,7 +17,7 @@ import java.util.Map;
  * @author bibo38
  * @see converter.ItemStackConverterTest
  */
-public class ItemStackTestConfig extends Config {
+public class ItemStackTestConfig extends YamlConfig {
 
     public TestItemStack cookie = new TestItemStack(Material.COOKIE);
     public TestItemStack specialWool = new TestItemStack(Material.WOOL);

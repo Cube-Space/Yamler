@@ -1,10 +1,8 @@
 package extend;
 
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
-import java.io.File;
-
-public class ExtendTestConfig extends Config
+public class ExtendTestConfig extends YamlConfig
 {
     public ActionConfig action = new ActionConfig();
     public TriggerableActionConfig trigAct = new TriggerableActionConfig();

@@ -1,9 +1,9 @@
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class PrivateConfig extends Config {
+public class PrivateConfig extends YamlConfig {
     private boolean TestBoolean = false;
     private int TestInt = 0;
     private short TestShort = 0;

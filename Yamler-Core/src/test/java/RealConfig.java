@@ -1,6 +1,6 @@
 import net.cubespace.Yamler.Config.Comment;
 import net.cubespace.Yamler.Config.Comments;
-import net.cubespace.Yamler.Config.Config;
+import net.cubespace.Yamler.Config.YamlConfig;
 import net.cubespace.Yamler.Config.ConfigSection;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
-public class RealConfig extends Config {
+public class RealConfig extends YamlConfig {
     @Comment("Database configuration.")
     private ConfigSection database;
     @Comments({"The database JDBC address. Should replace dbname with the database name."})

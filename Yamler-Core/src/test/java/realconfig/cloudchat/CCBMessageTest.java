@@ -26,7 +26,7 @@ public class CCBMessageTest extends BaseTest {
         String fileContents = Util.readFile(file);
 
         Assert.assertEquals(fileContents,
-                "Command:\n" +
+                "\nCommand:\n" +
                 "  NotPlayer: You can do this only as a Player\n" +
                 "Announce:\n" +
                 "  FactionMode: 'You currently Chat to: %mode'\n" +
