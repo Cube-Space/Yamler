@@ -4,6 +4,7 @@ import net.cubespace.Yamler.Config.ConfigSection;
 import net.cubespace.Yamler.Config.Converter.Converter;
 import net.cubespace.Yamler.Config.InternalConverter;
 import org.bukkit.Material;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
@@ -66,14 +67,18 @@ public class ItemStack implements Converter {
         }
 
         if(metaMap != null) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
             if(metaMap.get("name") != null) {
-                itemStack.getItemMeta().setDisplayName((String) metaMap.get("name"));
+                itemMeta.setDisplayName((String) metaMap.get("name"));
             }
 
             if(metaMap.get("lore") != null) {
                 Converter listConverter = converter.getConverter(List.class);
-                itemStack.getItemMeta().setLore((List<String>) listConverter.fromConfig(List.class, metaMap.get("lore"), null));
+                itemMeta.setLore((List<String>) listConverter.fromConfig(List.class, metaMap.get("lore"), null));
             }
+
+            itemStack.setItemMeta(itemMeta);
         }
 
         return itemStack;
