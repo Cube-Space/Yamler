@@ -46,20 +46,13 @@ public class YamlConfig extends ConfigMapper implements IConfig {
 			String path = "";
 
 			switch (CONFIG_MODE) {
-				case PATH_BY_UNDERSCORE:
-					path = field.getName().replace("_", ".");
-					break;
 				case FIELD_IS_KEY:
 					path = field.getName();
 					break;
+				case PATH_BY_UNDERSCORE:
 				case DEFAULT:
 				default:
-					String fieldName = field.getName();
-					if (fieldName.contains("_")) {
-						path = field.getName().replace("_", ".");
-					} else {
-						path = field.getName();
-					}
+					path = field.getName().replaceAll("_", ".");
 					break;
 			}
 
@@ -169,7 +162,7 @@ public class YamlConfig extends ConfigMapper implements IConfig {
 				continue;
 			}
 
-			String path = (CONFIG_MODE.equals(ConfigMode.PATH_BY_UNDERSCORE)) ? field.getName().replaceAll("_", ".") : field.getName();
+			String path = (CONFIG_MODE.equals(ConfigMode.PATH_BY_UNDERSCORE) ||  CONFIG_MODE.equals(ConfigMode.DEFAULT) ) ? field.getName().replaceAll("_", ".") : field.getName();
 
 			if (field.isAnnotationPresent(Path.class)) {
 				Path path1 = field.getAnnotation(Path.class);
