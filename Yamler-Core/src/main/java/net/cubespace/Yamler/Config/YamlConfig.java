@@ -52,6 +52,9 @@ public class YamlConfig extends ConfigMapper implements IConfig {
 				case FIELD_IS_KEY:
 					path = field.getName();
 					break;
+			    case PATH_BY_CAMEL_CASE: 
+				    path = getCamelCasePath(field.getName());
+					break;
 				case DEFAULT:
 				default:
 					String fieldName = field.getName();
@@ -213,5 +216,27 @@ public class YamlConfig extends ConfigMapper implements IConfig {
 
 		CONFIG_FILE = file;
 		load();
+	}
+	
+	/**
+	 * Converts the name of a field to a YAML Path, e.g. databaseUsername --> database.Username
+	 * by GitGraf
+	 * @param fieldName The name of the field that needs to be converted
+	 * @return A dot seperated yaml path
+	 */
+	private String getCamelCasePath(String fieldName)
+	{
+	  StringBuffer pathBuffer = new StringBuffer();
+	  char[] fieldArray = fieldName.toCharArray();
+	  for(int i = 0; i < fieldArray.length; i++) {
+	    
+	    if(Character.isUpperCase(fieldArray[i])) {
+	      pathBuffer.append(".");
+	    }
+	    
+	    pathBuffer.append(fieldArray[i]);
+	    
+	  }
+	  return pathBuffer.toString();
 	}
 }

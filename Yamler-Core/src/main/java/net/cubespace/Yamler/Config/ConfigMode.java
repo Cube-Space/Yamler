@@ -6,5 +6,6 @@ package net.cubespace.Yamler.Config;
 public enum ConfigMode {
     DEFAULT,
     PATH_BY_UNDERSCORE,
+	PATH_BY_CAMEL_CASE,
     FIELD_IS_KEY
 }
